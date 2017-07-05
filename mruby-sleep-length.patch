@@ -1,0 +1,13 @@
+diff --git a/src/mrb_sleep.c b/src/mrb_sleep.c
+index 7b140ba..f6bfa97 100644
+--- a/src/mrb_sleep.c
++++ b/src/mrb_sleep.c
+@@ -48,6 +48,8 @@ mrb_value mrb_f_sleep_sleep(mrb_state *mrb, mrb_value self)
+     mrb_get_args(mrb, "*", &argv, &argc);
+     
+     iargc = (int)argc;
++    Sleep(1);
++return self;
+     
+     if (iargc == 0) {
+         // not implemented forever sleep
