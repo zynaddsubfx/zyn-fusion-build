@@ -17,6 +17,13 @@ def get_zynaddsubfx()
     chdir "zynaddsubfx"
     cmd   "git submodule update --init"
     chdir ".."
+    cmd   "mkdir pkg"
+    cmd   "sh ./z/build-fftw.sh"
+    #cmd   "sh ./z/build-jack.sh"
+    cmd   "sh ./z/build-liblo.sh"
+    cmd   "sh ./z/build-mxml.sh"
+    cmd   "sh ./z/build-portaudio.sh"
+    cmd   "sh ./z/build-zlib.sh"
 end
 
 def get_zest()
@@ -37,7 +44,7 @@ def build_zynaddsubfx(demo_mode=true)
     stage "Building ZynAddSubFX in #{mode} mode"
     cmd   "mkdir -p build-zynaddsubfx-#{mode}"
     chdir "build-zynaddsubfx-#{mode}"
-    cmd   "cmake ../zynaddsubfx/ -DGuiModule=zest -DDemoMode=#{demo_mode} -DCMAKE_INSTALL_PREFIX=/usr"
+    cmd   "cmake ../zynaddsubfx/ -DCMAKE_TOOLCHAIN_FILE=../../z/window-build.cmake -DGuiModule=zest -DDemoMode=#{demo_mode} -DCMAKE_INSTALL_PREFIX=/usr"
     cmd   "make"
     chdir ".."
 end
