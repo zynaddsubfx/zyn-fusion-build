@@ -39,7 +39,7 @@ def get_zest()
     chdir "mruby-zest-build"
     cmd   "git submodule update --init"
     cmd   "ruby rebuild-fcache.rb"
-    cmd   "mv testing-cache.rb src/mruby-widget-lib/mrblib/fcache.rb"
+    #cmd   "mv testing-cache.rb src/mruby-widget-lib/mrblib/fcache.rb"
     cmd   "make setup"
     cmd   "make builddep"
     chdir ".."
@@ -64,7 +64,7 @@ def build_zest(demo_mode=true)
     ENV["BUILD_MODE"] = mode
     cmd   "rm -f package/qml/*.qml"
     cmd   "ruby rebuild-fcache.rb"
-    cmd   "mv testing-cache.rb src/mruby-widget-lib/mrblib/fcache.rb"
+    #cmd   "mv testing-cache.rb src/mruby-widget-lib/mrblib/fcache.rb"
     cmd   "make"
     cmd   "make pack"
     cmd   "rm package/qml/*.qml"
