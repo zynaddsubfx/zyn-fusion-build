@@ -22,6 +22,10 @@ end
 def clean()
     cmd "rm -rf zynaddsubfx"
     cmd "rm -rf mruby-zest-build"
+    cmd "rm -f fftw-*.tar.gz*"
+    cmd "rm -f liblo-*.tar.gz*"
+    cmd "rm -f mxml-*.tar.gz*"
+    cmd "rm -f zlib-*.tar.gz*"
 end
 
 def apt_install(lib)
