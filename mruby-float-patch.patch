@@ -1,5 +1,5 @@
 diff --git a/include/mruby.h b/include/mruby.h
-index 8adce28..7d3364d 100644
+index 8adce28..beedbdd 100644
 --- a/include/mruby.h
 +++ b/include/mruby.h
 @@ -28,6 +28,7 @@
@@ -10,21 +10,19 @@ index 8adce28..7d3364d 100644
  #ifdef __cplusplus
  #define __STDC_LIMIT_MACROS
  #define __STDC_CONSTANT_MACROS
-@@ -37,6 +38,13 @@
+@@ -37,6 +38,11 @@
  #include <stdint.h>
  #include <stddef.h>
  #include <limits.h>
 +#include <float.h>
 +
-+//int DBL_epsILON;
-+//DBL_EPSILON
-+//#ifndef DBL_EPSILON
-+//#define DBL_EPSILON 1e-6
-+//#endif
++#ifndef DBL_EPSILON
++#define DBL_EPSILON 1e-6
++#endif
  
  #ifdef __cplusplus
  #ifndef SIZE_MAX
-@@ -48,6 +56,7 @@
+@@ -48,6 +54,7 @@
  #endif
  #endif
  

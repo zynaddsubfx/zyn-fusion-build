@@ -26,6 +26,7 @@ def clean()
     cmd "rm -f liblo-*.tar.gz*"
     cmd "rm -f mxml-*.tar.gz*"
     cmd "rm -f zlib-*.tar.gz*"
+    cmd "rm -f pa_stable_*.tgz*"
 end
 
 def apt_install(lib)
