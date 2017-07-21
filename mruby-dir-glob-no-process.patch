@@ -1,13 +1,17 @@
 diff --git a/mrbgem.rake b/mrbgem.rake
-index e7481ab..4a85883 100644
+index e7481ab..b6c9d70 100644
 --- a/mrbgem.rake
 +++ b/mrbgem.rake
-@@ -9,7 +9,7 @@ MRuby::Gem::Specification.new('mruby-dir-glob') do |spec|
+@@ -8,9 +8,9 @@ MRuby::Gem::Specification.new('mruby-dir-glob') do |spec|
+   spec.add_dependency 'mruby-dir'
    spec.add_dependency 'mruby-io'
    spec.add_dependency 'mruby-errno'
-   spec.add_dependency 'mruby-file-stat'
+-  spec.add_dependency 'mruby-file-stat'
 -  spec.add_dependency 'mruby-process'
-+  spec.add_dependency 'mruby-process'   if !ENV.include? "WINDOWS"
-   spec.add_dependency 'mruby-pack'
+-  spec.add_dependency 'mruby-pack'
++  spec.add_test_dependency 'mruby-file-stat'
++  spec.add_test_dependency 'mruby-process'
++  spec.add_test_dependency 'mruby-pack'
  
    # how to specify a 'general' regexp engine?
+ #  spec.add_dependency 'mruby-regexp-pcre'
