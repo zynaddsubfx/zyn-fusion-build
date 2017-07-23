@@ -109,9 +109,6 @@ def make_package_from_repos(demo_mode=true)
     stage "Making a package in #{mode} mode"
     chdir "build-zynaddsubfx-#{mode}"
     #cmd   "sudo make install"
-    chdir ".."
-    chdir "mruby-zest-build"
-    chdir ".."
     cmd   "pwd"
     #ENV["ZYN_FUSION_VERSION"] = CurrentVersion
     #cmd   "sudo ./linux-pack.sh linux-64bit-#{CurrentVersion}-#{mode}"
@@ -127,7 +124,7 @@ def make_package_from_repos(demo_mode=true)
     cmd "cp    mruby-zest-build/src/osc-bridge/schema/test.json  w64-package/schema/"
     cmd "cp    build-zynaddsubfx-#{mode}/src/Plugin/ZynAddSubFX/ZynAddSubFX.dll w64-package/"
     cmd "cp    build-zynaddsubfx-#{mode}/src/zynaddsubfx.exe                       w64-package/"
-    cmd "cp    pkg/lib/libportaudio-2.dll                    w64-package/"
+    cmd "cp    pkg/bin/libportaudio-2.dll                    w64-package/"
     cmd "cp    pkg/bin/libwinpthread-1.dll                   w64-package/"
     cmd "cp -a zynaddsubfx/instruments/banks                 w64-package/"
 
@@ -137,9 +134,11 @@ def make_package_from_repos(demo_mode=true)
 
     cmd "rm -f w64-package/qml/LocalPropTest.qml"
     cmd "rm -f w64-package/qml/FilterView.qml"
-    cmd "rm -rf #{CurrentVersion}"
-    cmd "mv w64-package #{CurrentVersion}"
-    cmd "zip -q -r #{CurrentVersion}-#{mode}.zip #{CurrentVersion}/*"
+    name = "zyn-fusion-windows-64bit-#{CurrentVersion}-#{mode}"
+    cmd "rm -rf #{name}"
+    cmd "rm -f  #{name}.zip"
+    cmd "mv w64-package #{name}"
+    cmd "zip -q -r #{name}.zip #{name}/*"
     #chdir ".."
     #cmd   "sudo mv /opt/zyn-fusion-linux-64bit-#{CurrentVersion}-#{mode}.tar.bz2 ./"
     #cmd   "sudo chown mark zyn-fusion-linux-64bit-#{CurrentVersion}-#{mode}.tar.bz2"
