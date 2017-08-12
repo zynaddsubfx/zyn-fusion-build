@@ -1,5 +1,5 @@
 #Settings
-CurrentVersion = "3.0.2"
+CurrentVersion = "3.0.2-patch4"
 
 def cmd(x)
     puts x
@@ -107,7 +107,7 @@ end
 def make_package_from_repos(demo_mode=true)
     mode = demo_mode ? "demo" : "release"
     stage "Making a package in #{mode} mode"
-    chdir "build-zynaddsubfx-#{mode}"
+    #chdir "build-zynaddsubfx-#{mode}"
     #cmd   "sudo make install"
     cmd   "pwd"
     #ENV["ZYN_FUSION_VERSION"] = CurrentVersion
