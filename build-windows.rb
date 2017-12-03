@@ -1,5 +1,5 @@
 #Settings
-CurrentVersion = "3.0.2-patch4"
+CurrentVersion = "3.0.3"
 
 def cmd(x)
     puts x
@@ -76,7 +76,7 @@ def build_zynaddsubfx(demo_mode=true)
     stage "Building ZynAddSubFX in #{mode} mode"
     cmd   "mkdir -p build-zynaddsubfx-#{mode}"
     chdir "build-zynaddsubfx-#{mode}"
-    cmd   "cmake ../zynaddsubfx/ -DCMAKE_TOOLCHAIN_FILE=../z/windows-build.cmake -DGuiModule=zest -DDemoMode=#{demo_mode} -DCMAKE_INSTALL_PREFIX=/usr"
+    cmd   "cmake ../zynaddsubfx/ -DCMAKE_TOOLCHAIN_FILE=../z/windows-build.cmake -DGuiModule=zest -DDemoMode=#{demo_mode} -DCMAKE_INSTALL_PREFIX=/usr -DDefaultOutput=pa"
     cmd   "make"
     chdir ".."
 end
