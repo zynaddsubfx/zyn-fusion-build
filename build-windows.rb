@@ -52,7 +52,7 @@ end
 def get_zest()
     stage "Getting Zest"
     #Clone the unreleased UI submodules
-    cmd   "git clone --depth=1 git@fundamental-code.com:mruby-zest-build"
+    cmd   "git clone --depth=1 https://github.com/mruby-zest/mruby-zest-build"
     chdir "mruby-zest-build"
     cmd   "git submodule update --init"
 

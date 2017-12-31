@@ -30,7 +30,7 @@ def get_zest()
     dir = "zyn-fusion-ui-src-#{CurrentVersion}"
     stage "Getting Zest"
     #Clone the unreleased UI submodules
-    cmd   "git clone --depth=1 git@fundamental-code.com:mruby-zest-build #{dir}"
+    cmd   "git clone --depth=1 https://github.com/mruby-zest/mruby-zest-build #{dir}"
     chdir "#{dir}"
     cmd   "git submodule update --init"
     cmd   "git archive-all --prefix #{dir} ../#{dir}.tar"
