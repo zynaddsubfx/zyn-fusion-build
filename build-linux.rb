@@ -99,7 +99,6 @@ def make_package_from_repos(demo_mode=true)
     cmd "sudo cp      #{zyn}/src/zynaddsubfx /opt/zyn-fusion/"
     cmd "sudo cp      ./mruby-zest-build/install-linux.sh /opt/zyn-fusion/"
     cmd "sudo cp      ./mruby-zest-build/package-README.txt /opt/zyn-fusion/README.txt"
-    cmd "sudo cp      ./mruby-zest-build/zyn-fusion-ELUA.txt /opt/zyn-fusion/"
     cmd "sudo cp      ./zynaddsubfx/COPYING /opt/zyn-fusion/COPYING.zynaddsubfx"
     chdir "/opt/"
     cmd "sudo rm -f zyn-fusion-linux-64bit-#{CurrentVersion}-#{mode}.tar zyn-fusion-linux-64bit-#{CurrentVersion}-#{mode}.tar.bz2"
