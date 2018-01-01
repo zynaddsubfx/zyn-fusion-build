@@ -81,7 +81,7 @@ def make_package_from_repos(demo_mode=true)
     chdir ".."
     cmd "sudo rm -rf /opt/zyn-fusion"
     cmd "sudo mkdir /opt/zyn-fusion"
-    cmd "sudo chown mark:users /opt/zyn-fusion"
+    cmd "sudo chown mark:users /opt/zyn-fusion || true"
     cmd "sudo echo 'Version #{CurrentVersion}' >> /opt/zyn-fusion/VERSION"
     cmd "sudo echo 'Build on'      >> /opt/zyn-fusion/VERSION"
     cmd "sudo echo `date`          >> /opt/zyn-fusion/VERSION"
@@ -106,7 +106,7 @@ def make_package_from_repos(demo_mode=true)
     cmd "sudo bzip2 zyn-fusion-linux-64bit-#{CurrentVersion}-#{mode}.tar"
     chdir "#{this_dir}/"
     cmd   "sudo mv /opt/zyn-fusion-linux-64bit-#{CurrentVersion}-#{mode}.tar.bz2 ./"
-    cmd   "sudo chown mark zyn-fusion-linux-64bit-#{CurrentVersion}-#{mode}.tar.bz2"
+    cmd   "sudo chown mark zyn-fusion-linux-64bit-#{CurrentVersion}-#{mode}.tar.bz2 || true"
 end
 
 def build_demo_package()
