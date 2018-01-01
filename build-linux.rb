@@ -1,5 +1,5 @@
 #Settings
-CurrentVersion = "3.0.2"
+CurrentVersion = "3.0.3-patch1"
 
 def cmd(x)
     puts x
