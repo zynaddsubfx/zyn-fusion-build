@@ -79,7 +79,7 @@ def make_package_from_repos(demo_mode=true)
     chdir "build-zynaddsubfx-#{mode}"
     cmd   "sudo make install"
     chdir ".."
-    cmd "sudo rm -r /opt/zyn-fusion"
+    cmd "sudo rm -rf /opt/zyn-fusion"
     cmd "sudo mkdir /opt/zyn-fusion"
     cmd "sudo chown mark:users /opt/zyn-fusion"
     cmd "sudo echo 'Version #{CurrentVersion}' >> /opt/zyn-fusion/VERSION"
