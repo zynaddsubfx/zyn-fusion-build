@@ -1,3 +1,4 @@
+set -e
 wget https://github.com/michaelrsweet/mxml/releases/download/release-2.10/mxml-2.10.tar.gz
 tar xvf mxml-2.10.tar.gz
 cd mxml-2.10

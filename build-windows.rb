@@ -42,11 +42,11 @@ def get_zynaddsubfx()
     cmd   "mkdir -p pkg"
     cmd   "sh ./z/build-fftw.sh"
     #cmd   "sh ./z/build-jack.sh"
-    cmd   "sh ./z/build-liblo.sh"
-    cmd   "sh ./z/build-mxml.sh"
-    cmd   "sh ./z/build-portaudio.sh"
-    cmd   "sh ./z/build-zlib.sh"
-    cmd   "cp ./libwinpthread* ./pkg/bin/"
+    cmd   " sh ./z/build-liblo.sh"
+    cmd   " sh ./z/build-mxml.sh"
+    cmd   " sh ./z/build-portaudio.sh"
+    cmd   " sh ./z/build-zlib.sh"
+    cmd   " cp /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll ./pkg/bin/"
 end
 
 def get_zest()
@@ -74,9 +74,12 @@ end
 def build_zynaddsubfx(demo_mode=true)
     mode = demo_mode ? "demo" : "release"
     stage "Building ZynAddSubFX in #{mode} mode"
+    cmd   "rm -rf build-zynaddsubfx-#{mode}"
     cmd   "mkdir -p build-zynaddsubfx-#{mode}"
+    ENV["THIS"]= Dir.pwd
+    cmd   "echo $THIS"
     chdir "build-zynaddsubfx-#{mode}"
-    cmd   "cmake ../zynaddsubfx/ -DCMAKE_TOOLCHAIN_FILE=../z/windows-build.cmake -DGuiModule=zest -DDemoMode=#{demo_mode} -DCMAKE_INSTALL_PREFIX=/usr -DDefaultOutput=pa"
+    cmd   "cmake ../zynaddsubfx/ -DCMAKE_FIND_ROOT_PATH=$THIS/pkg -DCMAKE_TOOLCHAIN_FILE=../z/windows-build.cmake -DGuiModule=zest -DDemoMode=#{demo_mode} -DCMAKE_INSTALL_PREFIX=/usr -DDefaultOutput=pa"
     cmd   "make"
     chdir ".."
 end
@@ -170,6 +173,7 @@ apt_deps = %w{git ruby ruby-dev bison g++-mingw-w64-x86-64 autotools-dev automak
 ################################################################################
 #                          Do The Build                                        #
 ################################################################################
+
 apt_deps.each do |dep|
     apt_install dep
 end
