@@ -22,6 +22,8 @@ WTFPL.
 
 -"Unknown command python2": Make sure you copied your python files correctly and renamed python.exe to python2.exe in the bin folder. If you did it correctly, "/bin/sh python2" should print "cannot execute binary file" instead of "no such file or directory"
 
--"Rake failed, libuv.a" or "libuv-win.a do not exist": Make sure you copied the files to the correct folder (zyn-fusion-build-master/mruby-zest-test/deps/libuv.a or zyn-fusion-build-master/mruby-zest-test/deps/libuv-v1.9.1/.libs/libuv-win.a)
+-"Rake failed, libuv.a" or "libuv-win.a do not exist": Make sure you copied the files to the correct folder (zyn-fusion-build-master/mruby-zest-test/deps/libuv.a or zyn-fusion-build-master/mruby-zest-test/deps/libuv-v1.9.1/.libs/libuv-win.a), you have maybe a 2 minute window
 
 -"Cannot rename file: reason, file exists": Disable your antivirus, especially the active scanning
+
+-The exe files do not work: there's something wrong with the exe files, but the dll files work perfectly well. You can use it with your DAW as a VST
