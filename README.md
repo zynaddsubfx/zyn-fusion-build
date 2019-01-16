@@ -4,6 +4,8 @@ These build scripts (and only these build scripts) are licensed under the
 WTFPL.
 
 ---
+## Building on Linux 
+See [Building on Linux](../../wiki/Building-on-Linux) on repo's wiki.
 
 ## Building on Windows 
 0. download repository
