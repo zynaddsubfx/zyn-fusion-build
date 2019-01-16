@@ -18,7 +18,10 @@ WTFPL.
 9. run build-mingw64.sh from github download
 10. manually add mruby-zest-build/deps/libuv.a and mruby-zest-build/deps/libuv-v1.9.1/.libs/libuv-win.a **while the script is running, as soon as the folders appear**
 
-Troubleshooting
+## Troubleshooting
+
 -"Unknown command python2": Make sure you copied your python files correctly and renamed python.exe to python2.exe in the bin folder. If you did it correctly, "/bin/sh python2" should print "cannot execute binary file" instead of "no such file or directory"
+
 -"Rake failed, libuv.a" or "libuv-win.a do not exist": Make sure you copied the files to the correct folder (zyn-fusion-build-master/mruby-zest-test/deps/libuv.a or zyn-fusion-build-master/mruby-zest-test/deps/libuv-v1.9.1/.libs/libuv-win.a)
+
 -"Cannot rename file: reason, file exists": Disable your antivirus, especially the active scanning
