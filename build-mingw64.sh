@@ -82,6 +82,10 @@ cd ../mruby-io && git apply ../../../mruby-io-libname.patch
 cd ../../mruby && git apply ../../mruby-float-patch.patch
 cd ../
 ruby rebuild-fcache.rb
+
+mv deps/libuv-v1.9.1/.libs/libuv-win.a deps/libuv-v1.9.1/.libs/libuv.a
+mv deps/libuv-win.a deps/libuv.a
+
 make setupwin
 make builddepwin
 cd ..
