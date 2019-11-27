@@ -1,16 +1,8 @@
 diff --git a/include/mruby.h b/include/mruby.h
-index 8adce28..beedbdd 100644
+index 7deb3cbe..d0faebd6 100644
 --- a/include/mruby.h
 +++ b/include/mruby.h
-@@ -28,6 +28,7 @@
- #ifndef MRUBY_H
- #define MRUBY_H
- 
-+
- #ifdef __cplusplus
- #define __STDC_LIMIT_MACROS
- #define __STDC_CONSTANT_MACROS
-@@ -37,6 +38,11 @@
+@@ -38,6 +38,11 @@
  #include <stdint.h>
  #include <stddef.h>
  #include <limits.h>
@@ -22,104 +14,130 @@ index 8adce28..beedbdd 100644
  
  #ifdef __cplusplus
  #ifndef SIZE_MAX
-@@ -48,6 +54,7 @@
- #endif
- #endif
- 
-+
- #ifdef MRB_DEBUG
- #include <assert.h>
- #define mrb_assert(p) assert(p)
 diff --git a/src/backtrace.c b/src/backtrace.c
-index d634123..9f1c15d 100644
+index 991a67d0..90690fde 100644
 --- a/src/backtrace.c
 +++ b/src/backtrace.c
-@@ -209,11 +209,13 @@ exc_output_backtrace(mrb_state *mrb, struct RObject *exc, output_stream_func fun
+@@ -72,24 +72,25 @@ each_backtrace(mrb_state *mrb, ptrdiff_t ciidx, mrb_code *pc0, each_backtrace_fu
+ }
  
  #ifndef MRB_DISABLE_STDIO
- 
 +char superhack[1024*20];
-+
+ 
  static void
  print_backtrace(mrb_state *mrb, mrb_value backtrace)
  {
-   int i, n;
+   int i;
+   mrb_int n;
 -  FILE *stream = stderr;
-+char stream[1000];
++  char stream[1000];
  
-   fprintf(stream, "trace:\n");
+   n = RARRAY_LEN(backtrace) - 1;
+   if (n == 0) return;
  
-@@ -221,43 +223,46 @@ print_backtrace(mrb_state *mrb, mrb_value backtrace)
-   for (i = 0; i < n; i++) {
-     mrb_value entry = RARRAY_PTR(backtrace)[i];
+-  fprintf(stream, "trace (most recent call last):\n");
++  sprintf(stream, "trace (most recent call last):\n");
++  strcat(superhack, stream);
+   for (i=0; i<n; i++) {
+     mrb_value entry = RARRAY_PTR(backtrace)[n-i-1];
  
 -    if (mrb_string_p(entry)) {
 -      fprintf(stream, "\t[%d] %.*s\n", i, (int)RSTRING_LEN(entry), RSTRING_PTR(entry));
 -    }
 +    sprintf(stream, "\t[%d] %.*s\n", i, (int)RSTRING_LEN(entry), RSTRING_PTR(entry));
 +    strcat(superhack, stream);
-+
    }
  }
  
+@@ -110,29 +111,31 @@ packed_bt_len(const struct backtrace_location *bt, int n)
  static void
- print_backtrace_saved(mrb_state *mrb)
+ print_packed_backtrace(mrb_state *mrb, mrb_value packed)
  {
--  int i, ai;
 -  FILE *stream = stderr;
-+  int i;
-+  char *stream[1000];
++  char stream[1000];
+   const struct backtrace_location *bt;
+   int n, i;
+-  int ai = mrb_gc_arena_save(mrb);
  
--  fprintf(stream, "trace:\n");
--  ai = mrb_gc_arena_save(mrb);
-+  strcat(superhack, "print_backtrace_saved");
-+
+   bt = (struct backtrace_location*)mrb_data_check_get_ptr(mrb, packed, &bt_type);
+   if (bt == NULL) return;
+   n = (mrb_int)RDATA(packed)->flags;
+ 
+   if (packed_bt_len(bt, n) == 0) return;
+-  fprintf(stream, "trace (most recent call last):\n");
 +  strcat(superhack, "trace:\n");
-   for (i = 0; i < mrb->backtrace.n; i++) {
-     mrb_backtrace_entry *entry;
- 
-     entry = &(mrb->backtrace.entries[i]);
++  sprintf(stream, "trace (most recent call last):\n");
++  strcat(superhack, stream);
+   for (i = 0; i<n; i++) {
+     const struct backtrace_location *entry = &bt[n-i-1];
+     if (entry->filename == NULL) continue;
 -    fprintf(stream, "\t[%d] %s:%d", i, entry->filename, entry->lineno);
 +    sprintf(stream, "\t[%d] %s:%d", i, entry->filename, entry->lineno);
-+    strcat(superhack, stream);
- 
      if (entry->method_id != 0) {
        const char *method_name;
  
        method_name = mrb_sym2name(mrb, entry->method_id);
-       if (entry->klass) {
--        fprintf(stream, ":in %s%c%s",
-+        sprintf(stream, ":in %s%c%s",
-                 mrb_class_name(mrb, entry->klass),
-                 entry->sep,
-                 method_name);
-+        strcat(superhack, stream);
-       }
-       else {
--        fprintf(stream, ":in %s", method_name);
-+        sprintf(stream, ":in %s", method_name);
-+        strcat(superhack, stream);
-       }
+-      fprintf(stream, ":in %s", method_name);
 -      mrb_gc_arena_restore(mrb, ai);
++      sprintf(stream, ":in %s", method_name);
++	  strcat(superhack, stream);
      }
- 
 -    fprintf(stream, "\n");
-+    strcat(superhack, "\n");
++    sprintf(stream, "\n");
++	strcat(superhack, stream);
    }
  }
  
+@@ -215,13 +218,10 @@ mrb_keep_backtrace(mrb_state *mrb, mrb_value exc)
+ {
+   mrb_sym sym = mrb_intern_lit(mrb, "backtrace");
+   mrb_value backtrace;
+-  int ai;
+ 
+   if (mrb_iv_defined(mrb, exc, sym)) return;
+-  ai = mrb_gc_arena_save(mrb);
+   backtrace = packed_backtrace(mrb);
+   mrb_iv_set(mrb, exc, sym, backtrace);
+-  mrb_gc_arena_restore(mrb, ai);
+ }
+ 
+ mrb_value
+@@ -229,7 +229,6 @@ mrb_unpack_backtrace(mrb_state *mrb, mrb_value backtrace)
+ {
+   const struct backtrace_location *bt;
+   mrb_int n, i;
+-  int ai;
+ 
+   if (mrb_nil_p(backtrace)) {
+   empty_backtrace:
+@@ -240,7 +239,6 @@ mrb_unpack_backtrace(mrb_state *mrb, mrb_value backtrace)
+   if (bt == NULL) goto empty_backtrace;
+   n = (mrb_int)RDATA(backtrace)->flags;
+   backtrace = mrb_ary_new_capa(mrb, n);
+-  ai = mrb_gc_arena_save(mrb);
+   for (i = 0; i < n; i++) {
+     const struct backtrace_location *entry = &bt[i];
+     mrb_value btline;
+@@ -254,7 +252,6 @@ mrb_unpack_backtrace(mrb_state *mrb, mrb_value backtrace)
+       mrb_str_cat_cstr(mrb, btline, mrb_sym2name(mrb, entry->method_id));
+     }
+     mrb_ary_push(mrb, backtrace, btline);
+-    mrb_gc_arena_restore(mrb, ai);
+   }
+ 
+   return backtrace;
 diff --git a/src/fmt_fp.c b/src/fmt_fp.c
-index 483e04c..19633c0 100644
+index 1f1af676..d48a7ba1 100644
 --- a/src/fmt_fp.c
 +++ b/src/fmt_fp.c
-@@ -36,6 +36,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- #include <mruby.h>
- #include <mruby/string.h>
+@@ -35,6 +35,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ #include <float.h>
+ #include <ctype.h>
  
 +#ifndef LDBL_EPSILON
 +#define LDBL_EPSILON 1e-6
 +#endif
 +
- struct fmt_args {
-   mrb_state *mrb;
-   mrb_value str;
+ #include <mruby.h>
+ #include <mruby/string.h>
+ 
