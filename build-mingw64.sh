@@ -77,6 +77,7 @@ echo "---------Getting Zest---------------------"
 git clone --depth=1 https://github.com/mruby-zest/mruby-zest-build
 cd mruby-zest-build
 git submodule update --init
+git apply ../mruby-zest-no-process.patch
 cd deps/mruby-dir-glob && git apply ../../../mruby-dir-glob-no-process.patch
 cd ../mruby-io && git apply ../../../mruby-io-libname.patch
 cd ../../mruby && git apply ../../mruby-float-patch.patch
