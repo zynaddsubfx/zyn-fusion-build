@@ -10,7 +10,7 @@ index e7481ab..b6c9d70 100644
 -  spec.add_dependency 'mruby-process'
 -  spec.add_dependency 'mruby-pack'
 +  spec.add_test_dependency 'mruby-file-stat'
-+  spec.add_test_dependency 'mruby-process'
++  # spec.add_test_dependency 'mruby-process'
 +  spec.add_test_dependency 'mruby-pack'
  
    # how to specify a 'general' regexp engine?
