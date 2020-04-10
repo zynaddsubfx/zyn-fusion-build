@@ -80,7 +80,7 @@ def make_package_from_repos(demo_mode=true)
     cmd   "sudo make install"
     chdir ".."
     cmd "sudo rm -rf /opt/zyn-fusion"
-    cmd "sudo mkdir /opt/zyn-fusion"
+    cmd "sudo mkdir -p /opt/zyn-fusion"
     cmd "sudo chown $(whoami):users /opt/zyn-fusion || true"
     cmd "echo 'Version #{CurrentVersion}' | sudo tee -a /opt/zyn-fusion/VERSION"
     cmd "echo 'Build on'                  | sudo tee -a /opt/zyn-fusion/VERSION"
