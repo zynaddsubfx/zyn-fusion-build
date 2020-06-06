@@ -6,7 +6,7 @@ def cmd(x)
     ret = system(x)
     if(!ret)
         puts "ERROR: '#{x}' failed"
-        exit
+        exit 1
     end
 end
 
