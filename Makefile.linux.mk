@@ -135,3 +135,8 @@ package: preinstall_zynaddsubfx copy_zest_files
 	
 	@echo "Finished! Made Package in $(MODE) Mode"
 
+packarch: preinstall_zynaddsubfx copy_zest_files
+	@echo "Calling makepkg to build package for Arch Linux..."
+	makepkg -f -c --noprepare
+	
+	@echo "Finished. Generated file is $(shell ls *.tar.zst)"
