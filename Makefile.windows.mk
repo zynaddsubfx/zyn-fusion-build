@@ -3,9 +3,6 @@ include Install-deps.mk
 
 OS		:= windows
 
-# ZynAddSubFX's build path
-ZYNADDSUBFX_BUILD_DIR	:= $(BUILD_PATH)/build-zynaddsubfx-$(OS)-$(MODE)
-
 # Cross-compile dependencies
 ARCH_PACMAN_DEPS	+= mingw-w64-toolchain
 APT_DEPS			+= g++-mingw-w64-x86-64

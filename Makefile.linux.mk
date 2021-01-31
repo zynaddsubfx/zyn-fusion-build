@@ -8,10 +8,6 @@ OS		:= linux
 ARCH_PACMAN_DEPS	+= fftw mxml liblo zlib
 APT_DEPS			+= libfftw3-dev libmxml-dev liblo-dev zlib
 
-# ZynAddSubFX's build path
-ZYNADDSUBFX_BUILD_DIR	:= $(BUILD_PATH)/build-zynaddsubfx-$(OS)-$(MODE)
-
-
 #
 ############################ ZynAddSubFX Rules ############################
 #

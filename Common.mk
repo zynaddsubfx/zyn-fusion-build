@@ -26,8 +26,9 @@ ZEST_REPO_URL		:= https://github.com/mruby-zest/mruby-zest-build
 ZYNADDSUBFX_PATH	:= $(GIT_SRC_PATH)/zynaddsubfx
 ZEST_PATH	:= $(GIT_SRC_PATH)/mruby-zest-build
 
-# Packaging directories
-ZYNADDSUBFX_INSTALL_DIR := $(BUILD_PATH)/zynfx_install
+# Building & packaging directories
+ZYNADDSUBFX_BUILD_DIR	= $(BUILD_PATH)/build-zynaddsubfx-$(OS)-$(MODE)
+ZYNADDSUBFX_INSTALL_DIR = $(PREFIX_PATH)/zynfx_install
 ZYN_FUSION_OUT	:= $(BUILD_PATH)/zyn-fusion
 
 TAR_UNPACK		:= tar -x --strip-components 1 -f
