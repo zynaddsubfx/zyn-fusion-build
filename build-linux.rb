@@ -40,8 +40,8 @@ def get_zest()
     cmd   "git submodule update --init"
     cmd   "ruby rebuild-fcache.rb"
     #cmd   "mv testing-cache.rb src/mruby-widget-lib/mrblib/fcache.rb"
-    cmd   "make setup"
-    cmd   "make builddep"
+    #cmd   "make setup"
+    #cmd   "make builddep"
     chdir ".."
 end
 

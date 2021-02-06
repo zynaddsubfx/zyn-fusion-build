@@ -66,8 +66,8 @@ def get_zest()
     chdir "../"
 
     cmd   "ruby rebuild-fcache.rb"
-    cmd   "make setupwin"
-    cmd   "make builddepwin"
+    #cmd   "make setupwin"
+    #cmd   "make builddepwin"
     chdir ".."
 end
 
