@@ -1,5 +1,5 @@
 #Settings
-CurrentVersion = "3.0.3-patch1"
+CurrentVersion = "3.0.6-dev"
 
 def cmd(x)
     puts x
@@ -62,7 +62,7 @@ def get_zest()
     chdir "../mruby-io"
     cmd   "git apply ../../../mruby-io-libname.patch"
     chdir "../../mruby"
-    cmd   "git apply ../../mruby-float-patch.patch"
+    #cmd   "git apply ../../mruby-float-patch.patch"
     chdir "../"
 
     cmd   "ruby rebuild-fcache.rb"
@@ -178,81 +178,35 @@ apt_deps.each do |dep|
     apt_install dep
 end
 
-clean()
+steps = [:clean,
+         :get_zynaddsubfx,
+         :get_zest,
+         :build_demo,
+         :build_release,
+         :print_reminder]
 
-get_zynaddsubfx()
-get_zest()
+if(ARGV.length == 1)
+  if(ARGV[0] == "--clean")
+    steps = [:clean]
+  elsif(ARGV[0] == "--get-zyn")
+    steps = [:get_zynaddsubfx]
+  elsif(ARGV[0] == "--get-zest")
+    steps = [:get_zest]
+  elsif(ARGV[0] == "--build-demo")
+    steps = [:build_demo]
+  elsif(ARGV[0] == "--build-release")
+    steps = [:build_release]
+  elsif(ARGV[0] == "--print-reminder")
+    steps = [:print_reminder]
+  end
+end
 
-build_demo_package()
-build_release_package()
+clean() if steps.include?(:clean)
 
-display_reminders()
+get_zynaddsubfx() if steps.include? :get_zynaddsubfx
+get_zest()        if steps.include? :get_zest
 
-#echo '[INFO] create build file'
-#cat > w64.rb <<EOL
-#MRuby::Build.new('host') do |conf|
-#  toolchain :gcc
-#
-#  conf.cc do |cc|
-#    cc.command = 'gcc'
-#    cc.flags = []
-#  end
-#  conf.linker do |linker|
-#    linker.command = 'gcc'
-#    linker.flags   = []
-#  end
-#  conf.archiver do |archiver|
-#    archiver.command = 'ar'
-#  end
-#  conf.gembox 'default'
-#end
-#
-#MRuby::CrossBuild.new('w64') do |conf|
-#  # load specific toolchain settings
-#  toolchain :gcc
-#  enable_debug
-#  conf.gembox 'default'
-#end
-#EOL
+build_demo_package()    if steps.include? :build_demo
+build_release_package() if steps.include? :build_release_package
 
-#cd mruby
-
-#export MRUBY_CONFIG='../w64.rb'
-
-#make clean
-#make > ~/build-log.txt 2>&1
-#make setupwin
-#make builddepwin
-
-
-#echo '[INFO] run build process'
-#rm -r mruby-zest-build/mruby/build/w64
-#make windows
-#
-#cd ..
-#rm    -r w64-package
-#mkdir -p w64-package
-#mkdir -p w64-package/qml
-#touch    w64-package/qml/MainWindow.qml
-#mkdir -p w64-package/font
-#mkdir -p w64-package/schema
-#cp    mruby-zest-build/zest.exe         w64-package/zyn-fusion.exe
-#cp    mruby-zest-build/libzest.dll      w64-package/libzest.dll
-#cp    `find . -type f | grep ttf$`                      w64-package/font/
-#cp    mruby-zest-build/src/osc-bridge/schema/test.json  w64-package/schema/
-#cp    ~/z/zynaddsubfx/build/src/Plugin/ZynAddSubFX/ZynAddSubFX.dll w64-package/
-#cp    ~/z/zynaddsubfx/build/src/zynaddsubfx.exe                       w64-package/
-#cp    ~/z/pkg/bin/libportaudio-2.dll                    w64-package/
-#cp    ~/z/pkg/bin/libwinpthread-1.dll                   w64-package/
-#cp -a ~/z/zynaddsubfx/instruments/banks                 w64-package/
-#
-#echo `date` > w64-package/VERSION
-#
-#echo `pwd`
-#
-#rm w64-package/qml/LocalPropTest.qml
-#rm w64-package/qml/FilterView.qml
-#rm -rf zyn-fusion-3.0.2
-#mv w64-package zyn-fusion-3.0.2
-#zip -q -r zyn-fusion-3.0.2rc1.zip zyn-fusion-3.0.2/*
-#cat ~/build-log.txt
+display_reminders() if steps.include? :print_reminder
