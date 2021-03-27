@@ -7,7 +7,23 @@ WTFPL.
 
 ---
 
+## Fetch repositories
+
+You need to fetch this repo first. **Don't forget to add `--recursive`**, as Zyn-Fusion has a large number of submodules:
+
+```shell
+git clone --recursive https://github.com/anclark/zyn-fusion-build zyn-fusion-build
+```
+
+If you omitted `--recursive`, you can still fetch those submodules later:
+
+```shell
+cd zyn-fusion-build
+git submodule update --init --recursive
+```
+
 ## How to build
+
 Zyn-Fusion now uses Makefile. Each platform has a corresponding Makefile (`Makefile.<platform>.mk`):
 
 | Makefile              | Target platform (Where Zyn runs) | Host platform (where compilers run) |
@@ -112,20 +128,3 @@ make -f Makefile.mingw64.mk package
   ```bash
   make -f Makefile.<platform>.mk help
   ```
-
-## Build with legacy scripts
-
-Scripts (shell or Ruby) under this source tree are former build scripts. They fetch source and dependencies in-place, and also build them in-place. This may cause compatibility issues on host platforms. Actually, Makefiles above are their rewrites.
-
-You need to install Ruby to execute `*.rb` files.
-
-| Script             | Target platform      | Host platform                                             |
-| ------------------ | -------------------- | --------------------------------------------------------- |
-| `build-linux.rb`   | Linux (native build) | Linux                                                     |
-| `build-windows.rb` | Windows              | Linux (cross-compile)                                     |
-| `build-mingw64.sh` | Windows              | Msys2 Mingw-w64 64 bit                                    |
-| `build-rpi3.rb`    | Raspberry Pi 3       | Raspberry Pi **itself** <br>with ARM native GCC toolchain |
-
-Other scripts are for building components or testing only.
-
-See [Building on Linux](../../wiki/Building-on-Linux) on repo's wiki for usage.

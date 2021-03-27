@@ -12,15 +12,6 @@ APT_DEPS			+= libfftw3-dev libmxml-dev liblo-dev zlib
 ############################ ZynAddSubFX Rules ############################
 #
 
-fetch_zynaddsubfx: prepare_workspace
-	$(info ========== Getting ZynAddSubFX ==========)
-	$(info \n)
-ifeq (, $(wildcard $(ZYNADDSUBFX_PATH)))
-	git clone --depth=1 $(ZYNADDSUBFX_REPO_URL) $(ZYNADDSUBFX_PATH)
-endif
-	cd $(ZYNADDSUBFX_PATH); \
-	git submodule update --init
-
 #
 # Final make rule
 #
@@ -43,15 +34,6 @@ build_zynaddsubfx:
 #
 ############################ Zest Rules ############################
 #
-
-fetch_zest: prepare_workspace
-	$(info ========== Getting Zest ==========)
-	$(info \n)
-ifeq (,$(wildcard $(ZEST_PATH)))
-	git clone --depth=1 $(ZEST_REPO_URL) $(ZEST_PATH)
-endif
-	cd $(ZEST_PATH); \
-	git submodule update --init
 
 revoke_mruby_patches: fetch_zest
 	cd $(ZEST_PATH)/deps/mruby-dir-glob ; \

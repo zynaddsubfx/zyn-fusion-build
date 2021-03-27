@@ -1,0 +1,18 @@
+[submodule "deps/zlib"]
+	path = deps/zlib
+	url = https://github.com/madler/zlib
+[submodule "deps/portaudio"]
+	path = deps/portaudio
+	url = https://github.com/PortAudio/portaudio
+[submodule "deps/liblo"]
+	path = deps/liblo
+	url = https://github.com/radarsat1/liblo
+[submodule "deps/mxml"]
+	path = deps/mxml
+	url = https://github.com/michaelrsweet/mxml
+[submodule "src/mruby-zest-build"]
+	path = src/mruby-zest-build
+	url = https://github.com/anclark/mruby-zest-build
+[submodule "src/zynaddsubfx"]
+	path = src/zynaddsubfx
+	url = https://github.com/zynaddsubfx/zynaddsubfx

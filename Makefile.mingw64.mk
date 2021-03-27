@@ -7,15 +7,6 @@ OS		:= windows
 ############################ ZynAddSubFX Rules ############################
 #
 
-fetch_zynaddsubfx: prepare_workspace
-	$(info ========== Getting ZynAddSubFX ==========)
-	$(info \n)
-ifeq (, $(wildcard $(ZYNADDSUBFX_PATH)))
-	git clone --depth=1 $(ZYNADDSUBFX_REPO_URL) $(ZYNADDSUBFX_PATH)
-endif
-	cd $(ZYNADDSUBFX_PATH); \
-	git submodule update --init
-
 #
 # Fetch dependencies
 #
@@ -28,35 +19,36 @@ copy_libwinpthread: prepare_workspace
 #
 # Build dependencies
 #
-build_fftw: $(NORMAL_SRC_PATH)/fftw
+
+build_fftw: $(DEPS_PATH)/fftw
 	cd $< ; \
 	./configure --prefix=$(PREFIX_PATH) --with-our-malloc --disable-mpi
 
 	$(MAKE) -C $<
 	$(MAKE) -C $< install
 
-build_libio: $(NORMAL_SRC_PATH)/libio
+build_libio: $(DEPS_PATH)/liblo
 	cd $< ; \
-	./configure --prefix=$(PREFIX_PATH) --disable-shared --enable-static
+	./autogen.sh --prefix=$(PREFIX_PATH) --disable-shared --enable-static
 
 	$(MAKE) -C $<
 	$(MAKE) -C $< install
 
-build_mxml: $(NORMAL_SRC_PATH)/mxml
+build_mxml: $(DEPS_PATH)/mxml
 	cd $< ; \
 	./configure --prefix=$(PREFIX_PATH) --disable-shared --enable-static
 
 	$(MAKE) -C $< libmxml.a
 	$(MAKE) -C $< -i install TARGETS=""
 
-build_portaudio: $(NORMAL_SRC_PATH)/portaudio
+build_portaudio: $(DEPS_PATH)/portaudio
 	cd $< ; \
 	./configure --prefix=$(PREFIX_PATH)
 
 	$(MAKE) -C $<
 	$(MAKE) -C $< install
 
-build_zlib: $(NORMAL_SRC_PATH)/zlib
+build_zlib: $(DEPS_PATH)/zlib
 	cd $< ; \
 	cmake -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$(PREFIX_PATH)
 
@@ -94,15 +86,6 @@ build_zynaddsubfx:
 #
 ############################ Zest Rules ############################
 #
-
-fetch_zest: prepare_workspace
-	$(info ========== Getting Zest ==========)
-	$(info \n)
-ifeq (,$(wildcard $(ZEST_PATH)))
-	git clone --depth=1 $(ZEST_REPO_URL) $(ZEST_PATH)
-endif
-	cd $(ZEST_PATH); \
-	git submodule update --init
 
 apply_mruby_patches: fetch_zest
 	cd $(ZEST_PATH)/deps/mruby-dir-glob ; \
@@ -164,7 +147,7 @@ copy_zest_files:
 
 	cp $(ZEST_PATH)/zest.exe $(ZYN_FUSION_OUT)/zyn-fusion.exe
 	cp $(ZEST_PATH)/libzest.dll $(ZYN_FUSION_OUT)/libzest.dll
-	cp $(shell find $(ZEST_PATH)/deps/nanovg -type f | grep ttf$) $(ZYN_FUSION_OUT)/font/
+	cp $(shell find $(ZEST_PATH)/deps/nanovg -type f | grep ttf$$) $(ZYN_FUSION_OUT)/font/
 	cp $(ZEST_PATH)/src/osc-bridge/schema/test.json $(ZYN_FUSION_OUT)/schema/
 
 	cp $(ZYNADDSUBFX_BUILD_DIR)/src/Plugin/ZynAddSubFX/ZynAddSubFX.dll $(ZYN_FUSION_OUT)/

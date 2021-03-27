@@ -101,7 +101,9 @@ endif
 
 # Download/extract ZynAddSubFX's dependency sources
 
-$(NORMAL_SRC_PATH)/fftw: prepare_workspace
+# FFTW's GitHub repo is not out-of-box (ready for compiling right now).
+# The authors recommend that we fetch tarball instead.
+$(DEPS_PATH)/fftw: prepare_workspace
 ifeq (, $(wildcard $(DOWNLOAD_PATH)/fftw*.tar.gz))
 	# File doesn't exist. Must redownload.
 	wget http://www.fftw.org/fftw-3.3.4.tar.gz -O $(DOWNLOAD_PATH)/fftw-3.3.4.tar.gz
@@ -109,45 +111,25 @@ endif
 	mkdir -p $@
 	$(TAR_UNPACK)  $(DOWNLOAD_PATH)/fftw*tar.gz -C $@ --skip-old-files
 
-
-$(NORMAL_SRC_PATH)/libio: prepare_workspace
-	# Sourceforge contains redirections. Must use wget.
-ifeq (, $(wildcard $(DOWNLOAD_PATH)/libio*.tar.gz))
-	# File doesn't exist. Must redownload.
-	wget http://downloads.sourceforge.net/liblo/liblo-0.28.tar.gz -O $(DOWNLOAD_PATH)/libio-0.28.tar.gz
+$(DEPS_PATH)/liblo: prepare_workspace
+ifeq (, $(wildcard $@))
+	git submodule update --init $@
 endif
-	mkdir -p $@
-	$(TAR_UNPACK)  $(DOWNLOAD_PATH)/libio*tar.gz -C $@ --skip-old-files
 
-
-$(NORMAL_SRC_PATH)/mxml: prepare_workspace
-	# GitHub may contains redirections. Must use wget.
-ifeq (, $(wildcard $(DOWNLOAD_PATH)/mxml*.tar.gz))
-	# File doesn't exist. Must redownload.
-	wget https://github.com/michaelrsweet/mxml/releases/download/release-2.10/mxml-2.10.tar.gz -O $(DOWNLOAD_PATH)/mxml-2.10.tar.gz
+$(DEPS_PATH)/mxml: prepare_workspace
+ifeq (, $(wildcard $@))
+	git submodule update --init $@
 endif
-	rm -rf $@
-	mkdir -p $@
-	$(TAR_UNPACK)   $(DOWNLOAD_PATH)/mxml*tar.gz -C $@
 
-
-$(NORMAL_SRC_PATH)/portaudio: prepare_workspace
-ifeq (, $(wildcard $(DOWNLOAD_PATH)/portaudio*.tgz))
-	wget http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz -O $(DOWNLOAD_PATH)/portaudio-src.tgz
+$(DEPS_PATH)/portaudio: prepare_workspace
+ifeq (, $(wildcard $@))
+	git submodule update --init $@
 endif
-	rm -rf $@
-	mkdir -p $@
-	$(TAR_UNPACK)  $(DOWNLOAD_PATH)/portaudio*tgz -C $@
 
-
-$(NORMAL_SRC_PATH)/zlib: prepare_workspace
-	# Sourceforge contains redirections. Must use wget.
-ifeq (, $(wildcard $(DOWNLOAD_PATH)/zlib*.tar.gz))
-	# File doesn't exist. Must redownload.
-	wget http://downloads.sourceforge.net/libpng/zlib/1.2.7/zlib-1.2.7.tar.gz -O $(DOWNLOAD_PATH)/zlib-1.2.7.tar.gz
+$(DEPS_PATH)/zlib: prepare_workspace
+ifeq (, $(wildcard $@))
+	git submodule update --init $@
 endif
-	mkdir -p $@
-	$(TAR_UNPACK) $(DOWNLOAD_PATH)/zlib*tar.gz -C $@ --skip-old-files
 
 
 # Download/extract libuv, Zest's dependency.

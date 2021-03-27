@@ -8,19 +8,24 @@ else
 DEMO_MODE	:= false
 endif
 
+# Enable parallel build when invoking GNU Make
+ifdef PARALLEL
+MAKE	:= $(MAKE) -j`grep -c "processor" /proc/cpuinfo`
+endif
+
 # Work directories
 TOP			:= $(PWD)
 WORKPATH	:= $(PWD)/tmp/
 BUILD_PATH	:= $(PWD)/build/
 DOWNLOAD_PATH	:= $(WORKPATH)/download
-NORMAL_SRC_PATH	:= $(WORKPATH)/src
-GIT_SRC_PATH	:= $(WORKPATH)/src_git
+DEPS_PATH	:= $(PWD)/deps/
+GIT_SRC_PATH	:= $(PWD)/src
 PREFIX_PATH		:= $(WORKPATH)/prefix
 
 # Repositories
 # You can replace them with your own fork.
 ZYNADDSUBFX_REPO_URL	:= https://github.com/zynaddsubfx/zynaddsubfx
-ZEST_REPO_URL		:= https://github.com/mruby-zest/mruby-zest-build
+ZEST_REPO_URL		:= https://github.com/anclark/mruby-zest-build
 
 # Zyn's source pathes
 ZYNADDSUBFX_PATH	:= $(GIT_SRC_PATH)/zynaddsubfx
@@ -79,10 +84,40 @@ help:
 	"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 prepare_workspace: 
-	mkdir -p $(WORKPATH) $(DOWNLOAD_PATH) $(NORMAL_SRC_PATH) $(GIT_SRC_PATH) $(PREFIX_PATH)
+	mkdir -p $(WORKPATH) $(DOWNLOAD_PATH) $(DEPS_PATH) $(GIT_SRC_PATH) $(PREFIX_PATH)
+
+fetch_zynaddsubfx: prepare_workspace
+	$(info ========== Fetching ZynAddSubFX ==========)
+	$(info \n)
+ifeq (, $(wildcard $(ZYNADDSUBFX_PATH)))
+	$(info ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━)
+	$(info WARNING!)
+	$(info ZynAddSubFX is not fetched.)
+	$(info Running `git submodule update --init` to get it.)
+	$(info ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━)
+	git submodule update --init $(ZYNADDSUBFX_PATH)
+endif
+	git submodule update $(ZYNADDSUBFX_PATH)
+	cd $(ZYNADDSUBFX_PATH); \
+	git submodule update --init
+
+fetch_zest: prepare_workspace
+	$(info ========== Fetching Zest ==========)
+	$(info \n)
+ifeq (,$(wildcard $(ZEST_PATH)))
+	$(info ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━)
+	$(info WARNING!)
+	$(info Zest is not fetched.)
+	$(info Running `git submodule update --init` to get it.)
+	$(info ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━)
+	git submodule update --init $(ZEST_PATH)
+endif
+	git submodule update $(ZEST_PATH)
+	cd $(ZEST_PATH); \
+	git submodule update --init
+
 
 clean:
-	rm -rf $(NORMAL_SRC_PATH)
 	rm -rf $(PREFIX_PATH)
 	rm -rf $(BUILD_PATH)
 
@@ -91,3 +126,7 @@ clean:
 
 distclean: clean
 	rm -rf $(WORKPATH)
+
+	for i in deps/fftw deps/liblo deps/mxml deps/portaudio deps/zlib; do \
+	$(MAKE) -C $$i distclean; \
+	done
