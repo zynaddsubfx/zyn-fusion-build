@@ -19,8 +19,8 @@ depends=('fftw' 'libglvnd' 'mxml' 'jack' 'liblo' 'alsa-lib' 'portaudio')
 provides=('zynaddsubfx')
 conflicts=('zynaddsubfx' 'zyn-fusion')
 
-zyn_fusion_out_dir="$PWD"/build/zyn-fusion
-zynaddsubfx_src_dir="$PWD"/tmp/src_git/zynaddsubfx
+zyn_fusion_out_dir="$PWD"/../build/zyn-fusion
+zynaddsubfx_src_dir="$PWD"/../src/zynaddsubfx
 
 prepare() {
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━  ERROR  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

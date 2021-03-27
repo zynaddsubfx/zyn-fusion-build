@@ -115,6 +115,8 @@ package: preinstall_zynaddsubfx copy_zest_files
 
 packarch: preinstall_zynaddsubfx copy_zest_files
 	@echo "Calling makepkg to build package for Arch Linux..."
-	makepkg -f -c --noprepare
+	cd z/ ; \
+	makepkg -f -c --noprepare; \
+	mv *.tar.zst ../
 	
 	@echo "Finished. Generated file is $(shell ls *.tar.zst)"
