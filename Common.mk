@@ -17,7 +17,7 @@ endif
 TOP			:= $(PWD)
 WORKPATH	:= $(PWD)/tmp/
 BUILD_PATH	:= $(PWD)/build/
-DOWNLOAD_PATH	:= $(WORKPATH)/download
+DOWNLOAD_PATH	:= $(PWD)/download/
 DEPS_PATH	:= $(PWD)/deps/
 GIT_SRC_PATH	:= $(PWD)/src
 PREFIX_PATH		:= $(WORKPATH)/prefix
@@ -117,6 +117,7 @@ endif
 	git submodule update --init
 
 
+# Clean built files, except those in dependencies' source path (as you can rebuild Zyn/Zest faster).
 clean:
 	rm -rf $(PREFIX_PATH)
 	rm -rf $(BUILD_PATH)
@@ -124,6 +125,7 @@ clean:
 	$(MAKE) -C $(ZEST_PATH) clean
 	rm -rf $(ZEST_PATH)/libzest* zest*
 
+# Clean all built files, including dependencies'.
 distclean: clean
 	rm -rf $(WORKPATH)
 
