@@ -14,6 +14,7 @@ OS		:= windows
 #
 
 copy_libwinpthread: prepare_workspace
+	mkdir -p $(PREFIX_PATH)/bin/
 	cp /mingw64/bin/libwinpthread* $(PREFIX_PATH)/bin/
 
 #

@@ -34,6 +34,8 @@ endif
 #
 
 copy_libwinpthread: prepare_workspace
+	mkdir -p $(PREFIX_PATH)/bin/
+
 # Arch Linux's MinGW-w64 puts libwinpthread-1.dll into "bin" instead of "lib"
 ifneq (, $(wildcard /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll))
 	cp /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll $(PREFIX_PATH)/bin/
