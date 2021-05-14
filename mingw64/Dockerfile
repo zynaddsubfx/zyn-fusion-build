@@ -155,7 +155,7 @@ RUN cmake -DCMAKE_TOOLCHAIN_FILE=mingw64-build.cmake \
           -DCMAKE_INSTALL_PREFIX=/usr \
           -DDefaultOutput=pa \
           ..
-RUN make
+RUN make -j10
 
 
 RUN apk add ruby-rake
@@ -171,6 +171,8 @@ WORKDIR /mruby-zest-build/
 
 RUN make clean
 RUN cp /opt/pkg/lib/libuv.a deps/libuv-win.a
+RUN mkdir -p deps/libuv-v1.9.1/include
+RUN cp /opt/pkg/include/*h deps/libuv-v1.9.1/include/
 #RUN ls /usr/x86_64-w64-mingw32/lib/
 
 RUN CC=x86_64-w64-mingw32-gcc \
