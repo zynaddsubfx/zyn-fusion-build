@@ -1,9 +1,11 @@
 #Settings
 CurrentVersion = "3.0.6-dev"
 
+#exit -1
+
 def cmd(x)
     puts x
-    ret = system(x)
+    ret = system(x, STDERR=>STDOUT)
     if(!ret)
         puts "ERROR: '#{x}' failed"
         exit 1
@@ -57,13 +59,16 @@ def get_zest()
     cmd   "git submodule update --init"
 
     #Apply patches which have been at least mentioned upstream
-    chdir "deps/mruby-dir-glob"
-    cmd   "git apply ../../../mruby-dir-glob-no-process.patch"
-    chdir "../mruby-io"
-    cmd   "git apply ../../../mruby-io-libname.patch"
-    chdir "../../mruby"
-    #cmd   "git apply ../../mruby-float-patch.patch"
-    chdir "../"
+    #chdir "deps/mruby-dir-glob"
+    #cmd   "git apply ../../../mruby-dir-glob-no-process.patch"
+    #chdir "../mruby-io"
+    #cmd   "git apply ../../../mruby-io-libname.patch"
+    #chdir "../../mruby"
+    ##cmd   "git apply ../../mruby-float-patch.patch"
+    #chdir "../"
+    chdir "mruby"
+    cmd   "git apply ../string-backtraces.diff"
+    chdir ".."
 
     cmd   "ruby rebuild-fcache.rb"
     #cmd   "make setupwin"
@@ -79,7 +84,7 @@ def build_zynaddsubfx(demo_mode=true)
     ENV["THIS"]= Dir.pwd
     cmd   "echo $THIS"
     chdir "build-zynaddsubfx-#{mode}"
-    cmd   "cmake ../zynaddsubfx/ -DCMAKE_FIND_ROOT_PATH=$THIS/pkg -DCMAKE_TOOLCHAIN_FILE=../z/windows-build.cmake -DGuiModule=zest -DDemoMode=#{demo_mode} -DCMAKE_INSTALL_PREFIX=/usr -DDefaultOutput=pa"
+    cmd   "cmake ../zynaddsubfx/ -DCMAKE_FIND_ROOT_PATH=$THIS/pkg -DCMAKE_TOOLCHAIN_FILE=../z/windows-build.cmake -DGuiModule=zest -DDemoMode=#{demo_mode} -DCMAKE_INSTALL_PREFIX=/usr -DDefaultOutput=pa -DCompileTests=OFF"
     cmd   "make"
     chdir ".."
 end
@@ -91,6 +96,16 @@ def build_zest(demo_mode=true)
     cmd   "make clean"
     ENV["VERSION"]    = CurrentVersion
     ENV["BUILD_MODE"] = mode
+
+    #Yeah, I don't know what the heck is wrong with autoconf, but this is
+    #needed...
+    ENV["CC"]       = ""
+    ENV["CXX"]      = ""
+    ENV["AR"]       = ""
+    ENV["LD"]       = ""
+    ENV["CCLD"]     = ""
+    ENV["CFLAGS"]   = ""
+    cmd  "make deps/libuv-win.a"
 
     ENV["CC"]       = "/usr/bin/x86_64-w64-mingw32-gcc"
     ENV["CXX"]      = "/usr/bin/x86_64-w64-mingw32-g++"
@@ -150,16 +165,16 @@ end
 def build_demo_package()
     mode = "demo"
     stage "Building a package in #{mode} mode"
-    build_zynaddsubfx(true)
     build_zest(true)
+    build_zynaddsubfx(true)
     make_package_from_repos(true)
 end
 
 def build_release_package()
     mode = "release"
     stage "Building a package in #{mode} mode"
-    build_zynaddsubfx(false)
     build_zest(false)
+    build_zynaddsubfx(false)
     make_package_from_repos(false)
 end
 
