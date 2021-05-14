@@ -2,6 +2,11 @@
 # Eventually we should just link against the shared libuv option
 FROM archlinux as archlinux-libuv
 
+#HACK
+RUN patched_glibc=glibc-linux4-2.33-4-x86_64.pkg.tar.zst && \
+curl -LO "https://repo.archlinuxcn.org/x86_64/$patched_glibc" && \
+bsdtar -C / -xvf "$patched_glibc"
+
 #Build dependencies
 RUN pacman -Syu --noconfirm
 
@@ -22,11 +27,16 @@ RUN make install
 ############################################################
 FROM archlinux
 
+#HACK
+RUN patched_glibc=glibc-linux4-2.33-4-x86_64.pkg.tar.zst && \
+curl -LO "https://repo.archlinuxcn.org/x86_64/$patched_glibc" && \
+bsdtar -C / -xvf "$patched_glibc"
+
 #Build dependencies
 RUN pacman -Syu --noconfirm
 
 #Basics 
-RUN pacman -S gcc make --noconfirm
+RUN pacman -S gcc make pkgconf --noconfirm
 
 #Network
 RUN pacman -S libuv --noconfirm
