@@ -77,14 +77,23 @@ echo "---------Getting Zest---------------------"
 git clone --depth=1 https://github.com/mruby-zest/mruby-zest-build
 cd mruby-zest-build
 git submodule update --init
-cd deps/mruby-dir-glob && git apply ../../../mruby-dir-glob-no-process.patch
-cd ../mruby-io && git apply ../../../mruby-io-libname.patch
-cd ../../mruby && git apply ../../mruby-float-patch.patch
+#cd deps/mruby-dir-glob && git apply ../../../mruby-dir-glob-no-process.patch
+#cd ../mruby-io && git apply ../../../mruby-io-libname.patch
+#cd ../../mruby && git apply ../../mruby-float-patch.patch
+#cd ../
+#Those patches aren't used anymore.
+cd mruby
+git apply ../string-backtraces.diff
 cd ../
+
 ruby rebuild-fcache.rb
-make setupwin
-make builddepwin
+#These make targets have been removed from the makefile, and they aren't used in the ruby version of this build script
+#make setupwin
+#make builddepwin
 cd ..
 
+#The first builds the demo version of the zyn-fusion
 ./z/build-package.sh demo true
+#the second builds the release version.
 ./z/build-package.sh release false
+#comment out the demo version line, if you don't want to build it.
