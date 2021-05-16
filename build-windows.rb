@@ -163,11 +163,12 @@ def make_package_from_repos(demo_mode=true)
 end
 
 def build_demo_package()
-    mode = "demo"
+    #modification to always build release version
+    mode = "release"
     stage "Building a package in #{mode} mode"
-    build_zest(true)
-    build_zynaddsubfx(true)
-    make_package_from_repos(true)
+    build_zest(false)
+    build_zynaddsubfx(false)
+    make_package_from_repos(false)
 end
 
 def build_release_package()
