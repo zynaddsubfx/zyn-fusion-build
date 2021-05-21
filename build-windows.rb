@@ -197,7 +197,7 @@ steps = [:clean,
          :get_zynaddsubfx,
          :get_zest,
          :build_demo,
-         :build_release,
+         :build_release_package,
          :print_reminder]
 
 if(ARGV.length == 1)
