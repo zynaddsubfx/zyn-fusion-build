@@ -23,7 +23,7 @@ RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
 
 #Basics 
-RUN apt-get install -y gcc g++ make
+RUN apt-get install -y gcc g++ make pkg-config
 
 #Network
 RUN apt-get install -y libuv1-dev
