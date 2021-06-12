@@ -21,9 +21,5 @@ COPY ./z/build-zlib.sh ./z/
 COPY ./z/build.sh ./z/
 COPY ./z/mingw64-build.cmake ./z/
 COPY ./z/windows-build.cmake ./z/
-COPY ./mruby-dir-glob-no-process.patch .
-COPY ./mruby-sleep-length.patch .
-COPY ./mruby-io-libname.patch .
-COPY ./mruby-float-patch.patch .
 
 RUN ruby build-windows.rb
