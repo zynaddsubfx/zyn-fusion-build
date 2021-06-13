@@ -14,8 +14,6 @@ DEP_MXML=mxml-2.10.tar.gz
 GET_MXML=https://github.com/michaelrsweet/mxml/releases/download/release-2.10/mxml-2.10.tar.gz
 DEP_PA=pa_stable_v19_20140130.tgz
 GET_PA=http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz
-DEP_CXT=cxxtest-4.4.tar.gz
-GET_CXT=https://sourceforge.net/projects/cxxtest/files/cxxtest/4.4/cxxtest-4.4.tar.gz
 DEP_UV=libuv-v1.9.1.tar.gz
 GET_UV=http://dist.libuv.org/dist/v1.9.1/libuv-v1.9.1.tar.gz
 
@@ -23,7 +21,6 @@ GET_UV=http://dist.libuv.org/dist/v1.9.1/libuv-v1.9.1.tar.gz
 [ -f $DEP_ZLIB ]  || wget $GET_ZLIB
 [ -f $DEP_FFTW ]  || wget $GET_FFTW
 [ -f $DEP_MXML ]  || wget $GET_MXML
-[ -f $DEP_CXT ]   || wget $GET_CXT
 [ -f $DEP_PA ]    || wget $GET_PA
 [ -f $DEP_UV ]    || wget $GET_UV
 

@@ -80,19 +80,6 @@ RUN make install
 
 ################################################################################
 
-FROM alpine as mingw-cxxtest
-
-RUN apk update
-RUN apk add mingw-w64-gcc make
-RUN apk add tar
-
-COPY cxxtest-4.4.tar.gz .
-RUN mkdir -p /opt/pkg
-RUN tar xvf cxxtest*tar.gz
-RUN mv cxxtest*/* /opt/pkg/
-
-################################################################################
-
 FROM alpine as mingw-liblo
 
 RUN apk update
@@ -140,7 +127,6 @@ COPY --from=mingw-liblo   /opt/pkg/ /opt/pkg/
 COPY --from=mingw-fftw    /opt/pkg/ /opt/pkg/
 COPY --from=mingw-mxml    /opt/pkg/ /opt/pkg/
 COPY --from=mingw-libz    /opt/pkg/ /opt/pkg/
-COPY --from=mingw-cxxtest /opt/pkg/ /opt/pkg/
 COPY --from=mingw-libuv   /opt/pkg/ /opt/pkg/
 
 COPY zynaddsubfx /zynaddsubfx/
