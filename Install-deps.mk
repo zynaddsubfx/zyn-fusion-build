@@ -143,12 +143,13 @@ UV_DIR    = libuv-v1.9.1
 UV_FILE   = $(UV_DIR).tar.gz
 UV_URL    = http://dist.libuv.org/dist/v1.9.1/$(UV_FILE)
 
-setup_libuv: fetch_zest
+setup_libuv:
 ifeq (, $(wildcard $(DOWNLOAD_PATH)/$(UV_FILE)))
 	wget $(UV_URL) -O $(DOWNLOAD_PATH)/$(UV_FILE)
 endif
-	rm -rf $(ZEST_PATH)/deps/$(UV_DIR)
+	rm -rf $(ZEST_PATH)/deps/$(UV_DIR) && rm -rf $(ZEST_PATH)/deps/libuv
 	tar -xf $(DOWNLOAD_PATH)/$(UV_FILE) -C $(ZEST_PATH)/deps/
+	mv $(ZEST_PATH)/deps/$(UV_DIR) $(ZEST_PATH)/deps/libuv/
 
 
 #
