@@ -138,6 +138,9 @@ endif
 # Invoking `make setup` or `make setupwin` within mruby-zest-build/ 
 # will also download/extract libuv,
 # but it still downloads even though already downloaded.
+#
+# UPDATE: Now libuv had been a submodule of mruby-zest-build. 
+#         No need to use this rule.
 
 UV_DIR    = libuv-v1.9.1
 UV_FILE   = $(UV_DIR).tar.gz

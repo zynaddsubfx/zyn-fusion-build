@@ -125,7 +125,7 @@ apply_mruby_patches: fetch_zest
 	git checkout -- . ; \
 	patch -p1 -N < $(TOP)/mruby-float-patch.patch
 
-setup_zest: fetch_zest apply_mruby_patches setup_libuv
+setup_zest: fetch_zest apply_mruby_patches
 	cd $(ZEST_PATH) ; \
 	ruby rebuild-fcache.rb
 

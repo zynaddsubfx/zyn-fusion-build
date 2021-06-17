@@ -45,7 +45,7 @@ revoke_mruby_patches: fetch_zest
 	cd $(ZEST_PATH)/mruby ; \
 	git checkout -- .
 
-setup_zest: fetch_zest revoke_mruby_patches setup_libuv
+setup_zest: fetch_zest revoke_mruby_patches
 	cd $(ZEST_PATH) ; \
 	ruby rebuild-fcache.rb
 	
