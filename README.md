@@ -61,22 +61,6 @@ make -f Makefile.linux.mk package
 
 > **NOTICE:** You need to run `install-linux.sh` within the built folder to install Zyn-Fusion properly, or it won't run, moreover you'll only see a black window in your host.
 
-#### Generate package for Arch Linux
-
-```bash
-# First, you need to build both ZynAddSubFX and Zest
-make -f Makefile.linux.mk all
-
-# Then generate package for Arch Linux
-make -f Makefile.linux.mk packarch
-
-# Generated package resides in the CURRENT PATH, with extension ".tar.zst"
-# Package name is "zyn-fusion-userbuild" (to be distinct from AUR's version).
-#
-# You can directly install it via Pacman. For example:
-sudo pacman -U zyn-fusion-userbuild-3.0.6-4-x86_64.pkg.tar.zst
-```
-
 ### Building for Windows (cross-compile on Linux)
 
 ```bash
