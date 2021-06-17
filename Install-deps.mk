@@ -6,12 +6,16 @@ UNAME	= $(shell uname -a)
 ##################### Build dependencies #####################
 #
 
-ARCH_PACMAN_DEPS	:= git ruby ruby-rake tar zip wget cmake bison autoconf automake libtool patch
-APT_DEPS			:= git ruby ruby-dev bison autotools-dev automake libtool premake4 cmake
+ARCH_PACMAN_DEPS	:= git ruby ruby-rake tar zip wget cmake bison autoconf automake libtool patch pkg-config \
+	fftw mxml liblo zlib libx11 mesa
+APT_DEPS			:= git ruby ruby-dev bison autotools-dev automake libtool premake4 cmake wget pkg-config \
+	                   gcc g++ libfftw3-dev libmxml-dev liblo-dev zlib1g-dev libx11-dev mesa-common-dev libuv1-dev
 MSYS2_PACMAN_DEPS	:= git ruby gcc bison util-macros automake libtool mingw-w64-x86_64-cmake cmake \
 					mingw-w64-x86_64-mruby python3 autoconf zip make wget patch \
 					mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-pkg-config \
 					mingw-w64-x86_64-gcc-fortran mingw-w64-x86_64-gcc-libgfortran
+
+APK_DEPS := gcc g++ wget zlib-dev fftw-dev libuv-static libuv-dev ruby ruby-rake libx11-dev mesa-dev bison cmake liblo-dev mxml-dev
 
 install_deps:
 # Only allow being invoked within Makefile.<TARGET>.mk
@@ -41,12 +45,21 @@ ifneq (, $(wildcard /usr/bin/apt))
 else ifneq (, $(wildcard /usr/bin/pacman))
 	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 	@echo ""
-	@echo "  Detected Host OS: Arch Linux or directives                   "
+	@echo "  Detected Host OS: Arch Linux or directive                    "
 	@echo "  Installing dependencies via Pacman...                        "
 	@echo ""
 	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 	sudo pacman -Syyu
-	sudo pacman -S $(ARCH_PACMAN_DEPS)
+	sudo pacman -S $(ARCH_PACMAN_DEPS) --noconfirm
+
+else ifneq (, $(wildcard /sbin/apk))
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	@echo ""
+	@echo "  Detected Host OS: Alpine Linux or directive                  "
+	@echo "  Installing dependencies via apk...                           "
+	@echo ""
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	apk add $(APK_DEPS)
 
 else
 	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -112,24 +125,32 @@ endif
 	$(TAR_UNPACK)  $(DOWNLOAD_PATH)/fftw*tar.gz -C $@ --skip-old-files
 
 $(DEPS_PATH)/liblo: prepare_workspace
-ifeq (, $(wildcard $@))
-	git submodule update --init $@
+ifeq (, $(wildcard $(DOWNLOAD_PATH)/liblo*.tar.gz))
+	wget http://downloads.sourceforge.net/liblo/liblo-0.28.tar.gz -O $(DOWNLOAD_PATH)/liblo-0.28.tar.gz
 endif
+	mkdir -p $@
+	$(TAR_UNPACK)  $(DOWNLOAD_PATH)/liblo*tar.gz -C $@ --skip-old-files
 
 $(DEPS_PATH)/mxml: prepare_workspace
-ifeq (, $(wildcard $@))
-	git submodule update --init $@
+ifeq (, $(wildcard $(DOWNLOAD_PATH)/mxml*.tar.gz))
+	wget https://github.com/michaelrsweet/mxml/releases/download/release-2.10/mxml-2.10.tar.gz -O $(DOWNLOAD_PATH)/mxml-2.10.tar.gz
 endif
+	mkdir -p $@
+	$(TAR_UNPACK)  $(DOWNLOAD_PATH)/mxml*tar.gz -C $@ --skip-old-files
 
 $(DEPS_PATH)/portaudio: prepare_workspace
-ifeq (, $(wildcard $@))
-	git submodule update --init $@
+ifeq (, $(wildcard $(DOWNLOAD_PATH)/pa_*.tgz))
+	wget http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz -O $(DOWNLOAD_PATH)/pa_stable_v19_20140130.tgz
 endif
+	mkdir -p $@
+	$(TAR_UNPACK)  $(DOWNLOAD_PATH)/pa_stable*.tgz -C $@ --skip-old-files 
 
 $(DEPS_PATH)/zlib: prepare_workspace
-ifeq (, $(wildcard $@))
-	git submodule update --init $@
+ifeq (, $(wildcard $(DOWNLOAD_PATH)/zlib*.tar.gz))
+	wget http://downloads.sourceforge.net/libpng/zlib/1.2.7/zlib-1.2.7.tar.gz -O $(DOWNLOAD_PATH)/zlib-1.2.7.tar.gz
 endif
+	mkdir -p $@
+	$(TAR_UNPACK)  $(DOWNLOAD_PATH)/zlib*.tar.gz -C $@ --skip-old-files 
 
 
 # Download/extract libuv, Zest's dependency.
@@ -155,30 +176,30 @@ endif
 ##################### Possible polyfills (workarounds) #####################
 #
 
-# Original mruby-zest uses iij's mruby-process, which only supports Unix-based systems.
-# So I may need to replace it with appPlant's MinGW-compatible edition.
-#
-# But @fundamental proves that mruby-process is actually not a dependency for Zest,
-# and needed to bypass it in [mruby-zest-build/build_config.rb]:
-#    > Comment this line:
-#          conf.gem 'deps/mruby-process'
-# appPlant's version will also cause linker errors.
-#
-# Eventually, no need to do this polyfill. Just keep it as a backup.
-
-MRUBY_PROCESS_PATH	:= $(ZEST_PATH)/deps/mruby-process 
-MRUBY_PROCESS_REMOTE_URL	:= $(shell cd $(MRUBY_PROCESS_PATH); git remote get-url origin)
-
-mruby_process_polyfill: 
-ifeq (, $(findstring appPlant/mruby-process,$(MRUBY_PROCESS_REMOTE_URL)))
-	@echo "Polyfill: Replacing mruby-process with appPlant's MinGW-compatible edition..."
-	@echo
-	rm -rf $(MRUBY_PROCESS_PATH)
-	git clone https://github.com/appPlant/mruby-process $(MRUBY_PROCESS_PATH) 
-else
-	@echo No need to polyfill mruby-process. Updating...
-	@echo
-	cd $(MRUBY_PROCESS_PATH); \
-	git fetch; \
-	git checkout -f master
-endif
+##### Original mruby-zest uses iij's mruby-process, which only supports Unix-based systems.
+##### So I may need to replace it with appPlant's MinGW-compatible edition.
+#####
+##### But @fundamental proves that mruby-process is actually not a dependency for Zest,
+##### and needed to bypass it in [mruby-zest-build/build_config.rb]:
+#####    > Comment this line:
+#####          conf.gem 'deps/mruby-process'
+##### appPlant's version will also cause linker errors.
+#####
+##### Eventually, no need to do this polyfill. Just keep it as a backup.
+####
+####MRUBY_PROCESS_PATH	:= $(ZEST_PATH)/deps/mruby-process 
+####MRUBY_PROCESS_REMOTE_URL	:= $(shell cd $(MRUBY_PROCESS_PATH); git remote get-url origin)
+####
+####mruby_process_polyfill: 
+####ifeq (, $(findstring appPlant/mruby-process,$(MRUBY_PROCESS_REMOTE_URL)))
+####	@echo "Polyfill: Replacing mruby-process with appPlant's MinGW-compatible edition..."
+####	@echo
+####	rm -rf $(MRUBY_PROCESS_PATH)
+####	git clone https://github.com/appPlant/mruby-process $(MRUBY_PROCESS_PATH) 
+####else
+####	@echo No need to polyfill mruby-process. Updating...
+####	@echo
+####	cd $(MRUBY_PROCESS_PATH); \
+####	git fetch; \
+####	git checkout -f master
+####endif

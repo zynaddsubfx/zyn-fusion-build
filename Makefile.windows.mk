@@ -54,9 +54,9 @@ build_fftw: $(DEPS_PATH)/fftw
 	$(MAKE) -C $<
 	$(MAKE) -C $< install
 
-build_libio: $(DEPS_PATH)/liblo
+build_liblo: $(DEPS_PATH)/liblo
 	cd $< ; \
-	./autogen.sh --host=$(HOST) --prefix=$(PREFIX_PATH) --disable-shared --enable-static
+	./configure --host=$(HOST) --prefix=$(PREFIX_PATH) --disable-shared --enable-static
 
 	$(MAKE) -C $<
 	$(MAKE) -C $< install
@@ -85,7 +85,7 @@ build_zlib: $(DEPS_PATH)/zlib
 #
 # Final make rule
 #
-build_zynaddsubfx_deps: build_fftw build_libio build_mxml build_portaudio build_zlib copy_libwinpthread
+build_zynaddsubfx_deps: build_fftw build_liblo build_mxml build_portaudio build_zlib copy_libwinpthread
 
 get_zynaddsubfx: fetch_zynaddsubfx build_zynaddsubfx_deps
 
@@ -113,28 +113,16 @@ build_zynaddsubfx:
 
 
 apply_mruby_patches: fetch_zest
-	cd $(ZEST_PATH)/deps/mruby-dir-glob ; \
-	git checkout -- . ; \
-	patch -N < $(TOP)/mruby-dir-glob-no-process.patch
-
-	cd $(ZEST_PATH)/deps/mruby-io ; \
-	git checkout -- . ; \
-	patch -N < $(TOP)/mruby-io-libname.patch
-
+ifneq ($(ZEST_COMMIT), DIRTY)
 	cd $(ZEST_PATH)/mruby ; \
 	git checkout -- . ; \
-	patch -p1 -N < $(TOP)/mruby-float-patch.patch
-
-setup_zest: fetch_zest apply_mruby_patches setup_libuv
-	cd $(ZEST_PATH) ; \
-	ruby rebuild-fcache.rb
-
-	$(MAKE) -C $(ZEST_PATH) --always-make builddepwin
+	patch -p1 -N < ../string-backtraces.diff
+endif
 
 #
 # Final Make rule
 #
-get_zest: fetch_zest apply_mruby_patches setup_zest
+get_zest: fetch_zest apply_mruby_patches
 
 build_zest:
 	$(info ========== Building Zest in $(MODE) mode ==========)
@@ -159,7 +147,8 @@ build_zest:
 ############################ Packing Up Rules ############################
 #
 
-TARGET_ZIP_FILE	:= $(BUILD_PATH)/zyn-fusion-windows-64bit-$(MODE).zip
+TARGET_ZIP_FILE	:= $(BUILD_PATH)/zyn-fusion-windows-64bit-$(VER)-$(MODE).zip
+ZYN_FUSION_OUT	:= $(BUILD_PATH)/zyn-fusion-windows-64bit-$(VER)-$(MODE)
 
 copy_zest_files:
 	rm -rf $(ZYN_FUSION_OUT)

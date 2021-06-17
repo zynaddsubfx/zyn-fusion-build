@@ -3,11 +3,6 @@ include Install-deps.mk
 
 OS		:= linux
 
-# Linux local-build dependencies
-# No need to build from source code.
-ARCH_PACMAN_DEPS	+= fftw mxml liblo zlib
-APT_DEPS			+= libfftw3-dev libmxml-dev liblo-dev zlib
-
 #
 ############################ ZynAddSubFX Rules ############################
 #
@@ -36,20 +31,14 @@ build_zynaddsubfx:
 #
 
 revoke_mruby_patches: fetch_zest
-	cd $(ZEST_PATH)/deps/mruby-dir-glob ; \
-	git checkout -- .
-
-	cd $(ZEST_PATH)/deps/mruby-io ; \
-	git checkout -- .
-
+ifneq ($(ZEST_COMMIT), DIRTY)
 	cd $(ZEST_PATH)/mruby ; \
 	git checkout -- .
+endif
 
-setup_zest: fetch_zest revoke_mruby_patches setup_libuv
+setup_zest: fetch_zest revoke_mruby_patches
 	cd $(ZEST_PATH) ; \
 	ruby rebuild-fcache.rb
-	
-	$(MAKE) -C $(ZEST_PATH) --always-make builddep
 
 #
 # Final Make rule
@@ -76,7 +65,8 @@ build_zest:
 ############################ Packing Up Rules ############################
 #
 
-TARGET_TAR_FILE	:= $(BUILD_PATH)/zyn-fusion-linux-64bit-$(MODE).tar.bz2
+TARGET_TAR_FILE	:= $(BUILD_PATH)/zyn-fusion-linux-64bit-$(VER)-$(MODE).tar.bz2
+ZYN_FUSION_OUT	:= $(BUILD_PATH)/zyn-fusion-linux-64bit-$(VER)-$(MODE)
 
 preinstall_zynaddsubfx:
 	rm -rf $(ZYNADDSUBFX_INSTALL_DIR)
@@ -84,8 +74,9 @@ preinstall_zynaddsubfx:
 
 copy_zest_files: preinstall_zynaddsubfx
 	rm -rf $(ZYN_FUSION_OUT)
-
-	cp   -a $(ZYNADDSUBFX_INSTALL_DIR)/usr/lib/lv2/ZynAddSubFX.lv2presets	 $(ZYN_FUSION_OUT)
+	mkdir  $(ZYN_FUSION_OUT)
+	
+	cp   -a $(ZYNADDSUBFX_INSTALL_DIR)/usr/lib/lv2/ZynAddSubFX.lv2presets	 $(ZYN_FUSION_OUT)/
 	
 	cp   -a $(ZYNADDSUBFX_PATH)/instruments/banks		 $(ZYN_FUSION_OUT)/
 	cp	  $(ZEST_PATH)/package/libzest.so   $(ZYN_FUSION_OUT)/
@@ -110,13 +101,5 @@ package: preinstall_zynaddsubfx copy_zest_files
 # Use `basename` to avoid packing up absolute path
 	cd $(ZYN_FUSION_OUT)/../ ; \
 	tar acf $(TARGET_TAR_FILE) ./$(shell basename $(ZYN_FUSION_OUT))
-	
+	ls
 	@echo "Finished! Made Package in $(MODE) Mode"
-
-packarch: preinstall_zynaddsubfx copy_zest_files
-	@echo "Calling makepkg to build package for Arch Linux..."
-	cd z/ ; \
-	makepkg -f -c --noprepare; \
-	mv *.tar.zst ../
-	
-	@echo "Finished. Generated file is $(shell ls *.tar.zst)"

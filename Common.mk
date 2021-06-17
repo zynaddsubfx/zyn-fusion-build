@@ -1,7 +1,7 @@
-VER	:= 3.0.5
+VER	:= 3.0.6-git
 # Mode can be set to either "demo" or "release"
 # TODO: Use two final targets instead of manually setting this flag when invoking `make`
-MODE	:= release
+MODE	:= demo
 ifeq ($(MODE), demo)
 DEMO_MODE	:= true
 else
@@ -12,20 +12,24 @@ endif
 ifdef PARALLEL
 MAKE	:= $(MAKE) -j`grep -c "processor" /proc/cpuinfo`
 endif
+#MAKE	:= $(MAKE) -j30
 
 # Work directories
-TOP			:= $(PWD)
-WORKPATH	:= $(PWD)/tmp/
-BUILD_PATH	:= $(PWD)/build/
-DOWNLOAD_PATH	:= $(PWD)/download/
-DEPS_PATH	:= $(PWD)/deps/
-GIT_SRC_PATH	:= $(PWD)/src
+TOP			:= $(shell pwd)
+WORKPATH	:= $(TOP)/tmp/
+BUILD_PATH	:= $(TOP)/build/
+DOWNLOAD_PATH	:= $(TOP)/download/
+DEPS_PATH	:= $(TOP)/deps/
+GIT_SRC_PATH	:= $(TOP)/src
 PREFIX_PATH		:= $(WORKPATH)/prefix
 
 # Repositories
 # You can replace them with your own fork.
 ZYNADDSUBFX_REPO_URL	:= https://github.com/zynaddsubfx/zynaddsubfx
-ZEST_REPO_URL		:= https://github.com/anclark/mruby-zest-build
+ZEST_REPO_URL		:= https://github.com/mruby-zest/mruby-zest-build
+
+ZYNADDSUBFX_COMMIT	:= origin/master
+ZEST_COMMIT			:= origin/master
 
 # Zyn's source pathes
 ZYNADDSUBFX_PATH	:= $(GIT_SRC_PATH)/zynaddsubfx
@@ -34,7 +38,6 @@ ZEST_PATH	:= $(GIT_SRC_PATH)/mruby-zest-build
 # Building & packaging directories
 ZYNADDSUBFX_BUILD_DIR	= $(BUILD_PATH)/build-zynaddsubfx-$(OS)-$(MODE)
 ZYNADDSUBFX_INSTALL_DIR = $(PREFIX_PATH)/zynfx_install
-ZYN_FUSION_OUT	:= $(BUILD_PATH)/zyn-fusion
 
 TAR_UNPACK		:= tar -x --strip-components 1 -f
 
@@ -79,11 +82,13 @@ help:
 	"  ZYNADDSUBFX_REPO_URL  Specify another ZynAddSubFX repo URL\n"\
 	"  ZEST_REPO_URL         Specify another Zest repo URL\n"\
 	"                      ↑ You can use another Zyn forks as you wish.\n"\
+	"  ZYNADDSUBFX_COMMIT    Specify commit to checkout or DIRTY.\n"\
+	"  ZEST_COMMIT           Specify commit to checkout or DIRTY.\n"\
 	" \n"\
 	"NOTICE: To debug, refer to source code for possible targets. \n"\
 	"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-prepare_workspace: 
+prepare_workspace:
 	mkdir -p $(WORKPATH) $(DOWNLOAD_PATH) $(DEPS_PATH) $(GIT_SRC_PATH) $(PREFIX_PATH)
 
 fetch_zynaddsubfx: prepare_workspace
@@ -93,13 +98,19 @@ ifeq (, $(wildcard $(ZYNADDSUBFX_PATH)))
 	$(info ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━)
 	$(info WARNING!)
 	$(info ZynAddSubFX is not fetched.)
-	$(info Running `git submodule update --init` to get it.)
+	$(info Running `git clone` to get it.)
 	$(info ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━)
-	git submodule update --init $(ZYNADDSUBFX_PATH)
+	git clone $(ZYNADDSUBFX_REPO_URL) $(ZYNADDSUBFX_PATH)
 endif
-	git submodule update $(ZYNADDSUBFX_PATH)
+ifneq ($(ZYNADDSUBFX_COMMIT), DIRTY)
+	cd $(ZYNADDSUBFX_PATH); \
+	git fetch; \
+	git checkout $(ZYNADDSUBFX_COMMIT); \
+	git submodule update --init
+else
 	cd $(ZYNADDSUBFX_PATH); \
 	git submodule update --init
+endif
 
 fetch_zest: prepare_workspace
 	$(info ========== Fetching Zest ==========)
@@ -108,13 +119,19 @@ ifeq (,$(wildcard $(ZEST_PATH)))
 	$(info ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━)
 	$(info WARNING!)
 	$(info Zest is not fetched.)
-	$(info Running `git submodule update --init` to get it.)
+	$(info Running `git clone` to get it.)
 	$(info ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━)
-	git submodule update --init $(ZEST_PATH)
+	git clone $(ZEST_REPO_URL) $(ZEST_PATH)
 endif
-	git submodule update $(ZEST_PATH)
+ifneq ($(ZEST_COMMIT), DIRTY)
+	cd $(ZEST_PATH); \
+	git fetch; \
+	git checkout $(ZEST_COMMIT); \
+	git submodule update --init
+else
 	cd $(ZEST_PATH); \
 	git submodule update --init
+endif
 
 
 # Clean built files, except those in dependencies' source path (as you can rebuild Zyn/Zest faster).
