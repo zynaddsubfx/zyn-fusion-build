@@ -12,7 +12,7 @@ WTFPL.
 You need to fetch this repo first. **Don't forget to add `--recursive`**, as Zyn-Fusion has a large number of submodules:
 
 ```shell
-git clone --recursive https://github.com/anclark/zyn-fusion-build zyn-fusion-build
+git clone --recursive https://github.com/zynaddsubfx/zyn-fusion-build zyn-fusion-build
 ```
 
 If you omitted `--recursive`, you can still fetch those submodules later:
