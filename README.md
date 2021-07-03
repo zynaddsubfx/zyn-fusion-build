@@ -99,12 +99,12 @@ make -f Makefile.mingw64.mk package
 
 ### Moreover
 
-- **Build types (modes):** You can choose either `demo` or `release`, and `release` is the default. Demo build will automatically mute every 10 minutes.
+- **Build types (modes):** You can choose either `demo` or `release`, and `demo` is the default. Demo build will automatically mute after 10 minutes.
 
   You can explicitly specify build type:
   
   ```bash
-  make MODE=demo -f Makefile.<platform>.mk <target>
+  make MODE=release -f Makefile.<platform>.mk <target>
   ```
   
 - **Get help:** You can get a list of `make` targets by invoking:
