@@ -106,10 +106,10 @@ ifneq ($(ZYNADDSUBFX_COMMIT), DIRTY)
 	cd $(ZYNADDSUBFX_PATH); \
 	git fetch; \
 	git checkout $(ZYNADDSUBFX_COMMIT); \
-	git submodule update --init
+	git submodule update --init --recursive
 else
 	cd $(ZYNADDSUBFX_PATH); \
-	git submodule update --init
+	git submodule update --init --recursive
 endif
 
 fetch_zest: prepare_workspace
