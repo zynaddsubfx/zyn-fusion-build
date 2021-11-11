@@ -165,7 +165,7 @@ copy_zest_files:
 	cp $(shell find $(ZEST_PATH)/deps/nanovg -type f | grep ttf$$) $(ZYN_FUSION_OUT)/font/
 	cp $(ZEST_PATH)/src/osc-bridge/schema/test.json $(ZYN_FUSION_OUT)/schema/
 
-	cp $(ZYNADDSUBFX_BUILD_DIR)/src/Plugin/ZynAddSubFX/ZynAddSubFX.dll $(ZYN_FUSION_OUT)/
+	cp $(ZYNADDSUBFX_BUILD_DIR)/src/Plugin/ZynAddSubFX/vst/ZynAddSubFX.dll $(ZYN_FUSION_OUT)/
 	cp $(ZYNADDSUBFX_BUILD_DIR)/src/zynaddsubfx.exe $(ZYN_FUSION_OUT)/
 
 	cp $(PREFIX_PATH)/bin/libportaudio-2.dll $(ZYN_FUSION_OUT)/
