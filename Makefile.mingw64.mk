@@ -30,7 +30,10 @@ build_fftw: $(DEPS_PATH)/fftw
 
 build_libio: $(DEPS_PATH)/liblo
 	cd $< ; \
-	./autogen.sh --prefix=$(PREFIX_PATH) --disable-shared --enable-static
+	./configure --prefix=$(PREFIX_PATH) --disable-shared --enable-static
+	#./autogen.sh --prefix=$(PREFIX_PATH) --disable-shared --enable-static
+	#./configure --host=x86_64-w64-mingw32 --prefix=`pwd`/../pkg/ --disable-shared --enable-static
+
 
 	$(MAKE) -C $<
 	$(MAKE) -C $< install
@@ -89,23 +92,40 @@ build_zynaddsubfx:
 #
 
 apply_mruby_patches: fetch_zest
-	cd $(ZEST_PATH)/deps/mruby-dir-glob ; \
-	git checkout -- . ; \
-	patch -N < $(TOP)/mruby-dir-glob-no-process.patch
-
-	cd $(ZEST_PATH)/deps/mruby-io ; \
-	git checkout -- . ; \
-	patch -N < $(TOP)/mruby-io-libname.patch
-
+ifneq ($(ZEST_COMMIT), DIRTY)
 	cd $(ZEST_PATH)/mruby ; \
 	git checkout -- . ; \
-	patch -p1 -N < $(TOP)/mruby-float-patch.patch
+	patch -p1 -N < ../string-backtraces.diff
+endif
+
+
+	#this patch is to fix a conflict between mingw and libuv.
+	# the conflict is fixed in later versions of libuv, but mruby-zest uses an earlier version currently.
+	cd $(ZEST_PATH)/deps/libuv ; \
+	git checkout -- . ; \
+	patch -p1 -N < $(TOP)/0001-build-fix-build-failures-with-MinGW-new-headers.patch
+	
+	#these patches are obsolete, and no longer should be applied.	
+	#cd $(ZEST_PATH)/deps/mruby-dir-glob ; \
+	#git checkout -- . ; \
+	#patch -N < $(TOP)/mruby-dir-glob-no-process.patch
+
+	#cd $(ZEST_PATH)/deps/mruby-io ; \
+	#git checkout -- . ; \
+	#patch -N < $(TOP)/mruby-io-libname.patch
+
+	#cd $(ZEST_PATH)/mruby ; \
+	#git checkout -- . ; \
+	#patch -p1 -N < $(TOP)/mruby-float-patch.patch
+
+
 
 setup_zest: fetch_zest apply_mruby_patches setup_libuv
-	cd $(ZEST_PATH) ; \
-	ruby rebuild-fcache.rb
+#	cd $(ZEST_PATH) ; \
+#	ruby rebuild-fcache.rb
 
-	$(MAKE) -C $(ZEST_PATH) --always-make builddepwin
+#	$(MAKE) -C $(ZEST_PATH) --always-make builddepwin
+#The above make rule was removed in the cross compile windows makefile, and it causes an error when you run this makefile, so I commented it out here.
 
 #
 # Final Make rule
@@ -135,6 +155,8 @@ build_zest:
 #
 
 TARGET_ZIP_FILE	:= $(BUILD_PATH)/zyn-fusion-windows-64bit-$(MODE).zip
+ZYN_FUSION_OUT	:= $(BUILD_PATH)/zyn-fusion-windows-64bit-$(VER)-$(MODE)
+
 
 copy_zest_files:
 	rm -rf $(ZYN_FUSION_OUT)
@@ -151,7 +173,7 @@ copy_zest_files:
 	cp $(shell find $(ZEST_PATH)/deps/nanovg -type f | grep ttf$$) $(ZYN_FUSION_OUT)/font/
 	cp $(ZEST_PATH)/src/osc-bridge/schema/test.json $(ZYN_FUSION_OUT)/schema/
 
-	cp $(ZYNADDSUBFX_BUILD_DIR)/src/Plugin/ZynAddSubFX/ZynAddSubFX.dll $(ZYN_FUSION_OUT)/
+	cp $(ZYNADDSUBFX_BUILD_DIR)/src/Plugin/ZynAddSubFX/vst/ZynAddSubFX.dll $(ZYN_FUSION_OUT)/
 	cp $(ZYNADDSUBFX_BUILD_DIR)/src/zynaddsubfx.exe $(ZYN_FUSION_OUT)/
 
 	cp $(PREFIX_PATH)/bin/libportaudio-2.dll $(ZYN_FUSION_OUT)/
