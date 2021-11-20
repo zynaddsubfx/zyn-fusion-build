@@ -1,0 +1,37 @@
+From 3e90bc76b036124c2a94f9bf006af527755271cf Mon Sep 17 00:00:00 2001
+From: erw7 <erw7.github@gmail.com>
+Date: Wed, 3 Nov 2021 00:28:42 +0900
+Subject: [PATCH] build: fix build failures with MinGW new headers
+
+A structure definition was added to mstcpip.h in
+mingw-w64-x86_64-headers-git 9.0.0.6327.f29c1101f,
+which causes a conflict and the build fails. Fix this by
+changing the name in the definition in mstcpip.h.
+
+PR-URL: https://github.com/libuv/libuv/pull/3345
+---
+ include/uv/win.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/include/uv/win.h b/include/uv/win.h
+index f5f1d3a3..5fecf4bf 100644
+--- a/include/uv/win.h
++++ b/include/uv/win.h
+@@ -45,7 +45,14 @@ typedef struct pollfd {
+ #endif
+ 
+ #include <mswsock.h>
++// Disable the typedef in mstcpip.h of MinGW.
++#define _TCP_INITIAL_RTO_PARAMETERS _TCP_INITIAL_RTO_PARAMETERS__AVOID
++#define TCP_INITIAL_RTO_PARAMETERS TCP_INITIAL_RTO_PARAMETERS__AVOID
++#define PTCP_INITIAL_RTO_PARAMETERS PTCP_INITIAL_RTO_PARAMETERS__AVOID
+ #include <ws2tcpip.h>
++#undef _TCP_INITIAL_RTO_PARAMETERS
++#undef TCP_INITIAL_RTO_PARAMETERS
++#undef PTCP_INITIAL_RTO_PARAMETERS
+ #include <windows.h>
+ 
+ #include <process.h>
+-- 
+2.33.0
+
