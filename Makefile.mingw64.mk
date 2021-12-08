@@ -154,7 +154,7 @@ build_zest:
 ############################ Packing Up Rules ############################
 #
 
-TARGET_ZIP_FILE	:= $(BUILD_PATH)/zyn-fusion-windows-64bit-$(MODE).zip
+TARGET_ZIP_FILE	:= $(BUILD_PATH)/zyn-fusion-windows-64bit-$(VER)-$(MODE).zip
 ZYN_FUSION_OUT	:= $(BUILD_PATH)/zyn-fusion-windows-64bit-$(VER)-$(MODE)
 
 
