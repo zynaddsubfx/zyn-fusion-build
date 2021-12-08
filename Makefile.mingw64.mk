@@ -31,9 +31,6 @@ build_fftw: $(DEPS_PATH)/fftw
 build_libio: $(DEPS_PATH)/liblo
 	cd $< ; \
 	./configure --prefix=$(PREFIX_PATH) --disable-shared --enable-static
-	#./autogen.sh --prefix=$(PREFIX_PATH) --disable-shared --enable-static
-	#./configure --host=x86_64-w64-mingw32 --prefix=`pwd`/../pkg/ --disable-shared --enable-static
-
 
 	$(MAKE) -C $<
 	$(MAKE) -C $< install
@@ -105,27 +102,11 @@ endif
 	git checkout -- . ; \
 	patch -p1 -N < $(TOP)/0001-build-fix-build-failures-with-MinGW-new-headers.patch
 	
-	#these patches are obsolete, and no longer should be applied.	
-	#cd $(ZEST_PATH)/deps/mruby-dir-glob ; \
-	#git checkout -- . ; \
-	#patch -N < $(TOP)/mruby-dir-glob-no-process.patch
-
-	#cd $(ZEST_PATH)/deps/mruby-io ; \
-	#git checkout -- . ; \
-	#patch -N < $(TOP)/mruby-io-libname.patch
-
-	#cd $(ZEST_PATH)/mruby ; \
-	#git checkout -- . ; \
-	#patch -p1 -N < $(TOP)/mruby-float-patch.patch
-
-
-
+	
 setup_zest: fetch_zest apply_mruby_patches setup_libuv
 #	cd $(ZEST_PATH) ; \
 #	ruby rebuild-fcache.rb
 
-#	$(MAKE) -C $(ZEST_PATH) --always-make builddepwin
-#The above make rule was removed in the cross compile windows makefile, and it causes an error when you run this makefile, so I commented it out here.
 
 #
 # Final Make rule
