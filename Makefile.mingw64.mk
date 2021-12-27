@@ -104,8 +104,8 @@ endif
 	
 	
 setup_zest: fetch_zest apply_mruby_patches setup_libuv
-#	cd $(ZEST_PATH) ; \
-#	ruby rebuild-fcache.rb
+	cd $(ZEST_PATH) ; \
+	ruby rebuild-fcache.rb
 
 
 #
