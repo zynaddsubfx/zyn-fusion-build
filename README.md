@@ -9,17 +9,13 @@ WTFPL.
 
 ## Fetch repositories
 
-You need to fetch this repo first. **Don't forget to add `--recursive`**, as Zyn-Fusion has a large number of submodules:
+You need to fetch this repo first.
 
 ```shell
-git clone --recursive https://github.com/zynaddsubfx/zyn-fusion-build zyn-fusion-build
+git clone https://github.com/zynaddsubfx/zyn-fusion-build zyn-fusion-build
 ```
-
-If you omitted `--recursive`, you can still fetch those submodules later:
-
 ```shell
 cd zyn-fusion-build
-git submodule update --init --recursive
 ```
 
 ## How to build
