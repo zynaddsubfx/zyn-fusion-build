@@ -6,14 +6,15 @@ UNAME	= $(shell uname -a)
 ##################### Build dependencies #####################
 #
 
-ARCH_PACMAN_DEPS	:= git ruby ruby-rake tar zip wget cmake bison autoconf automake libtool patch pkg-config \
+ARCH_PACMAN_DEPS	:= git ruby ruby-rake tar zip wget cmake bison autoconf automake libtool patch pkgconf \
 	fftw mxml liblo zlib libx11 mesa
-APT_DEPS			:= git ruby ruby-dev bison autotools-dev automake libtool premake4 cmake wget pkg-config \
+APT_DEPS			:= git ruby ruby-dev bison autotools-dev automake libtool premake4 cmake wget pkgconf \
 	                   gcc g++ libfftw3-dev libmxml-dev liblo-dev zlib1g-dev libx11-dev mesa-common-dev libuv1-dev
 MSYS2_PACMAN_DEPS	:= git ruby gcc bison util-macros automake libtool mingw-w64-x86_64-cmake cmake \
 					mingw-w64-x86_64-mruby python3 autoconf zip make wget patch \
-					mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-pkg-config \
-					mingw-w64-x86_64-gcc-fortran mingw-w64-x86_64-gcc-libgfortran
+					mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-pkgconf \
+					mingw-w64-x86_64-gcc-fortran mingw-w64-x86_64-gcc-libgfortran \
+					mingw-w64-x86_64-fltk mingw-w64-x86_64-fftw
 
 APK_DEPS := gcc g++ wget zlib-dev fftw-dev libuv-static libuv-dev ruby ruby-rake libx11-dev mesa-dev bison cmake liblo-dev mxml-dev
 
