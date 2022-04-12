@@ -23,7 +23,7 @@ copy_libwinpthread: prepare_workspace
 
 build_fftw: $(DEPS_PATH)/fftw
 	cd $< ; \
-	./configure --prefix=$(PREFIX_PATH) --with-our-malloc --disable-mpi
+	./configure --prefix=$(PREFIX_PATH) --with-our-malloc --disable-mpi --enable-single
 
 	$(MAKE) -C $<
 	$(MAKE) -C $< install

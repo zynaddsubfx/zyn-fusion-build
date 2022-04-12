@@ -49,7 +49,7 @@ endif
 #
 build_fftw: $(DEPS_PATH)/fftw
 	cd $< ; \
-	./configure --host=$(HOST) --prefix=$(PREFIX_PATH) --with-our-malloc --disable-mpi
+	./configure --host=$(HOST) --prefix=$(PREFIX_PATH) --with-our-malloc --disable-mpi --enable-single
 
 	$(MAKE) -C $<
 	$(MAKE) -C $< install
