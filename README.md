@@ -79,6 +79,28 @@ You must install [Msys2](https://www.msys2.org/) first, then **remember choosing
 
 The **default MSYS environment** is based on Cygwin, which **won't work**!
 
+steps in order to build for windows:
+
+-  Download msys2 then open the shell and type those commands respectively:
+
+   -  run `update pacman -Syu`. 
+   -  run `pacman -su`.
+
+-  Open msys2-mingw64 shell from the start menu.
+ 
+-  run `pacman -s`.
+  
+-  run `pacman --needed -s git mingw-w64-x86-gcc base-devel`.
+
+-  run `pacman mingw-w64-x86-toolchain`.
+
+-  Add path to bin directory for both msys64 and mingw64 to the system enviroment variables.
+
+   For msys64: `..\msys64\mingw64\bin` 
+   For mingw64 `...\msys64\usr\bin` 
+
+Continue with the commands below:
+
 ```bash
 # Install build dependencies
 make -f Makefile.mingw64.mk install_deps
