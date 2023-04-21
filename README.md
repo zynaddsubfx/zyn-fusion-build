@@ -9,7 +9,7 @@ WTFPL.
 
 ## Fetch repositories
 
-You need to fetch this repo first.
+You need to fetch this repo first (if you're using Windows, see below for how to do it).
 
 ```shell
 git clone https://github.com/zynaddsubfx/zyn-fusion-build zyn-fusion-build
@@ -75,41 +75,43 @@ make -f Makefile.windows.mk package
 
 ### Building for Windows (native build via Msys2)
 
-You must install [Msys2](https://www.msys2.org/) first, then **remember choosing `Mingw-w64 64 bit ` in MinTTY** (you can find it in Start Menu). 
+#### Msys2 installation
 
-The **default MSYS environment** is based on Cygwin, which **won't work**!
+You must install [Msys2](https://www.msys2.org/) first.
+**Remember to always use the `Mingw64` terminal** (you can find it in Start Menu).
+Any other terminal will not work.
 
-steps in order to build for windows:
+Then finish updating the Msys installation by running in the
+Mingw64 terminal: `pacman -Suy` (twice).
+See https://www.msys2.org/docs/updating/ for details and https://archlinux.org/pacman/pacman.8.html for ̀pacman`.
 
--  Download msys2 then open the shell and type those commands respectively:
+#### Bootstrapping
 
-   -  run `update pacman -Syu`. 
-   -  run `pacman -su`.
+Checking out the code:
 
--  Open msys2-mingw64 shell from the start menu.
- 
--  run `pacman -s`.
-  
--  run `pacman --needed -s git mingw-w64-x86-gcc base-devel`.
+```
+pacman -S git make
+git clone https://github.com/zynaddsubfx/zyn-fusion-build zyn-fusion-build
+cd zyn-fusion-build
+```
 
--  run `pacman mingw-w64-x86-toolchain`.
+Then install the required tools through pacman:
 
--  Add path to bin directory for both msys64 and mingw64 to the system enviroment variables.
-
-   For msys64: `..\msys64\mingw64\bin` 
-   For mingw64 `...\msys64\usr\bin` 
-
-Continue with the commands below:
-
-```bash
-# Install build dependencies
+```
 make -f Makefile.mingw64.mk install_deps
+```
 
-# Start building
+#### Compile ZynFusion
+
+To compile everything:
+
+```
 make -f Makefile.mingw64.mk all
+```
 
-# Or, you can also build a specific component,
-# then finally use `package` to get a package file
+Alternatively you can also build a specific component, then finally use `package` to get a package file:
+
+```
 make -f Makefile.mingw64.mk zynaddsubfx
 make -f Makefile.mingw64.mk zest
 make -f Makefile.mingw64.mk package
