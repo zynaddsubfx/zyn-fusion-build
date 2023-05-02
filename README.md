@@ -46,12 +46,12 @@ Makefiles will automatically download ZynAddSubFX and Zest, as well as their dep
 make -f Makefile.linux.mk install_deps
 
 # Start building
-make -f Makefile.linux.mk all
+PARALLEL=1 make -f Makefile.linux.mk all
 
 # Or, you can also build a specific component,
 # then finally use `package` to get a package file
-make -f Makefile.linux.mk zynaddsubfx
-make -f Makefile.linux.mk zest
+PARALLEL=1 make -f Makefile.linux.mk zynaddsubfx
+PARALLEL=1 make -f Makefile.linux.mk zest
 make -f Makefile.linux.mk package
 ```
 
@@ -64,13 +64,13 @@ make -f Makefile.linux.mk package
 make -f Makefile.windows.mk install_deps
 
 # Start building
-make -f Makefile.windows.mk all
+PARALLEL=1 make -f Makefile.windows.mk all
 
 # Or, you can also build a specific component,
 # then finally use `package` to get a package file
-make -f Makefile.windows.mk zynaddsubfx
-make -f Makefile.windows.mk zest
-make -f Makefile.windows.mk package
+PARALLEL=1 make -f Makefile.windows.mk zynaddsubfx
+PARALLEL=1 make -f Makefile.windows.mk zest
+PARALLEL=1 make -f Makefile.windows.mk package
 ```
 
 ### Building for Windows (native build via Msys2)

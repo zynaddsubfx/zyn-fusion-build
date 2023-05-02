@@ -75,17 +75,17 @@ preinstall_zynaddsubfx:
 copy_zest_files: preinstall_zynaddsubfx
 	rm -rf $(ZYN_FUSION_OUT)
 	mkdir  $(ZYN_FUSION_OUT)
-	
+
 	cp   -a $(ZYNADDSUBFX_INSTALL_DIR)/usr/lib/lv2/ZynAddSubFX.lv2presets	 $(ZYN_FUSION_OUT)/
-	
+
 	cp   -a $(ZYNADDSUBFX_PATH)/instruments/banks		 $(ZYN_FUSION_OUT)/
 	cp	  $(ZEST_PATH)/package/libzest.so   $(ZYN_FUSION_OUT)/
 	cp	  $(ZEST_PATH)/package/zest		 $(ZYN_FUSION_OUT)/zyn-fusion
 	cp   -a $(ZEST_PATH)/package/font		 $(ZYN_FUSION_OUT)/
-	
+
 	mkdir  $(ZYN_FUSION_OUT)/qml
 	touch  $(ZYN_FUSION_OUT)/qml/MainWindow.qml
-	
+
 	cp   -a $(ZEST_PATH)/package/schema	   $(ZYN_FUSION_OUT)/
 	mkdir   $(ZYN_FUSION_OUT)/ZynAddSubFX.lv2
 	cp	  $(ZYNADDSUBFX_BUILD_DIR)/src/Plugin/ZynAddSubFX/lv2/* $(ZYN_FUSION_OUT)/ZynAddSubFX.lv2/
@@ -97,7 +97,7 @@ copy_zest_files: preinstall_zynaddsubfx
 
 package: preinstall_zynaddsubfx copy_zest_files
 	rm -rf $(TARGET_TAR_FILE)
-	
+
 # Use `basename` to avoid packing up absolute path
 	cd $(ZYN_FUSION_OUT)/../ ; \
 	tar acf $(TARGET_TAR_FILE) ./$(shell basename $(ZYN_FUSION_OUT))
