@@ -1,4 +1,4 @@
-VER	:= 3.0.6-git
+VER	:= 3.0.7
 # Mode can be set to either "demo" or "release"
 # TODO: Use two final targets instead of manually setting this flag when invoking `make`
 MODE	:= demo
