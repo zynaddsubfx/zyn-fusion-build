@@ -9,7 +9,7 @@ RUN apt-get install -y make
 RUN apt-get install -y sudo
 
 #Build dependencies 
-COPY ./Makefile.windows.mk /z/
+COPY ./version.txt /z/
 COPY ./Common.mk /z/
 COPY ./Install-deps.mk /z/
 COPY ./Makefile.windows.mk /z/
