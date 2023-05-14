@@ -12,8 +12,8 @@ RUN apk add mxml-dev
 
 RUN apk add liblo-dev --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
 
-
 #Build dependencies 
+COPY ./version.txt /z/
 COPY ./Makefile.linux.mk /z/
 COPY ./Common.mk /z/
 COPY ./Install-deps.mk /z/

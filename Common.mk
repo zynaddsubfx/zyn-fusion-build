@@ -1,4 +1,3 @@
-VER	:= 3.0.7
 # Mode can be set to either "demo" or "release"
 # TODO: Use two final targets instead of manually setting this flag when invoking `make`
 MODE	:= demo
@@ -23,13 +22,19 @@ DEPS_PATH	:= $(TOP)/deps/
 GIT_SRC_PATH	:= $(TOP)/src
 PREFIX_PATH		:= $(WORKPATH)/prefix
 
+VER := $(shell cat $(TOP)/version.txt)
+
 # Repositories
 # You can replace them with your own fork.
 ZYNADDSUBFX_REPO_URL	:= https://github.com/zynaddsubfx/zynaddsubfx
 ZEST_REPO_URL		:= https://github.com/mruby-zest/mruby-zest-build
 
-ZYNADDSUBFX_COMMIT	:= origin/master
-ZEST_COMMIT			:= origin/master
+# Branches to clone.
+# When cutting a release, use:
+#ZYNADDSUBFX_COMMIT	?= origin/release-$(VER)
+#ZEST_COMMIT			?= origin/release-$(VER)
+ZYNADDSUBFX_COMMIT	?= origin/master
+ZEST_COMMIT			?= origin/master
 
 # Zyn's source pathes
 ZYNADDSUBFX_PATH	:= $(GIT_SRC_PATH)/zynaddsubfx
