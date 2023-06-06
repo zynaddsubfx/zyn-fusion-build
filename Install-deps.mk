@@ -16,6 +16,9 @@ MSYS2_PACMAN_DEPS	:= git ruby gcc bison util-macros automake libtool mingw-w64-x
 					mingw-w64-x86_64-gcc-fortran mingw-w64-x86_64-gcc-libgfortran \
 					mingw-w64-x86_64-fltk mingw-w64-x86_64-fftw
 
+DNF_DEPS := git ruby rubygem-rake ruby-devel bison autoconf automake libtool premake cmake wget pkgconf \
+	    gcc g++ fftw-devel mxml-devel liblo-devel zlib-devel libX11-devel mesa-libGL-devel mesa-libGLU-devel libuv-devel
+
 APK_DEPS := gcc g++ wget zlib-dev fftw-dev libuv-static libuv-dev ruby ruby-rake libx11-dev mesa-dev bison cmake liblo-dev mxml-dev
 
 install_deps:
@@ -61,6 +64,15 @@ else ifneq (, $(wildcard /sbin/apk))
 	@echo ""
 	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 	apk add $(APK_DEPS)
+
+else ifneq (, $(wildcard /bin/dnf))
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	@echo ""
+	@echo "  Detected Host OS: Fedora Linux or directive                  "
+	@echo "  Installing dependencies via dnf...                           "
+	@echo ""
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	sudo dnf -y install $(DNF_DEPS)
 
 else
 	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
