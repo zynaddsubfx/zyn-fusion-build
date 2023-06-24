@@ -63,7 +63,7 @@ else ifneq (, $(wildcard /sbin/apk))
 	@echo "  Installing dependencies via apk...                           "
 	@echo ""
 	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-	apk add $(APK_DEPS)
+	apk add -t .zynaddsubfx-deps $(APK_DEPS)
 
 else ifneq (, $(wildcard /bin/dnf))
 	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
