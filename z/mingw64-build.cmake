@@ -1,4 +1,5 @@
 SET(CMAKE_SYSTEM_NAME Windows)
+SET(CMAKE_SYSTEM_PROCESSOR x86_64)
 
 
 find_package(PkgConfig REQUIRED)
