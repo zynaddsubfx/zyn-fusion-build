@@ -21,6 +21,8 @@ DNF_DEPS := git ruby rubygem-rake ruby-devel bison autoconf automake libtool pre
 
 APK_DEPS := gcc g++ wget zlib-dev fftw-dev libuv-static libuv-dev ruby ruby-rake libx11-dev mesa-dev bison cmake liblo-dev mxml-dev
 
+VOID_DEPS := git ruby ruby-devel bison autoconf automake libtool cmake wget pkgconf gcc fftw-devel mxml-devel liblo-devel zlib-devel libX11-devel libuv-devel premake4 MesaLib-devel glu-devel
+
 install_deps:
 # Only allow being invoked within Makefile.<TARGET>.mk
 ifeq (, $(filter Makefile.%.mk,$(MAKEFILE_LIST)))
@@ -73,6 +75,15 @@ else ifneq (, $(wildcard /bin/dnf))
 	@echo ""
 	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 	sudo dnf -y install $(DNF_DEPS)
+
+else ifneq (, $(wildcard /sbin/xbps-install))
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	@echo ""
+	@echo "  Detected Host OS: Void Linux                                 "
+	@echo "  Installing dependencies via xbps-install...                  "
+	@echo ""
+	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+	sudo xbps-install -y $(VOID_DEPS)
 
 else
 	@echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
