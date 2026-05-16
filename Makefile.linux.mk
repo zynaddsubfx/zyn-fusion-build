@@ -87,9 +87,11 @@ copy_zest_files: preinstall_zynaddsubfx
 	touch  $(ZYN_FUSION_OUT)/qml/MainWindow.qml
 
 	cp   -a $(ZEST_PATH)/package/schema	   $(ZYN_FUSION_OUT)/
-	mkdir   $(ZYN_FUSION_OUT)/ZynAddSubFX.lv2
-	cp	  $(ZYNADDSUBFX_BUILD_DIR)/src/Plugin/ZynAddSubFX/lv2/* $(ZYN_FUSION_OUT)/ZynAddSubFX.lv2/
-	cp	  $(ZYNADDSUBFX_BUILD_DIR)/src/Plugin/ZynAddSubFX/vst/ZynAddSubFX.so $(ZYN_FUSION_OUT)/
+	cp	 -r $(ZYNADDSUBFX_INSTALL_DIR)/usr/lib/lv2/ZynAddSubFX.lv2 $(ZYN_FUSION_OUT)/ZynAddSubFX.lv2/
+	cp	 -r $(ZYNADDSUBFX_INSTALL_DIR)/usr/lib/vst3/ZynAddSubFX.vst3 $(ZYN_FUSION_OUT)/ZynAddSubFX.vst3/
+	cp	  $(ZYNADDSUBFX_INSTALL_DIR)/usr/lib/vst/ZynAddSubFX-vst2.so $(ZYN_FUSION_OUT)/
+	cp	  $(ZYNADDSUBFX_INSTALL_DIR)/usr/lib/clap/ZynAddSubFX.clap $(ZYN_FUSION_OUT)/
+
 	cp	  $(ZYNADDSUBFX_BUILD_DIR)/src/zynaddsubfx $(ZYN_FUSION_OUT)/
 	cp	  $(ZEST_PATH)/install-linux.sh $(ZYN_FUSION_OUT)/
 	cp	  $(ZEST_PATH)/package-README.txt $(ZYN_FUSION_OUT)/README.txt
